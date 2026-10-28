@@ -1,46 +1,43 @@
-# Sand---billing-
 
 function makeQR(callback){
   const section = document.getElementById("billQR");
   section.innerHTML = "";
 
   const details = {
-    "Registration ID": getValue("regId"),
-    "Consumer Name": getValue("consumerName"),
-    "Consumer Mobile No": getValue("consumerMobile"),
-    "Construction Name": getValue("constructionName"),
-    "Registration Date & Time": formatDate(getValue("regDateTime")),
-    "Registration Type": getValue("regType"),
-    "Registration QTY (in MT)": getValue("regQty"),
-    "Registration Address": getValue("regAddress")
+    regId: getValue("regId"),
+    consumerName: getValue("consumerName"),
+    consumerMobile: getValue("consumerMobile"),
+    constructionName: getValue("constructionName"),
+    regDateTime: formatDate(getValue("regDateTime")),
+    regType: getValue("regType"),
+    regQty: getValue("regQty"),
+    regAddress: getValue("regAddress")
   };
 
-  const data = JSON.stringify(details);
-  const qr = document.createElement("img");
-  qr.alt = "Registration Details QR Code";
+  const encoded = btoa(
+    unescape(encodeURIComponent(JSON.stringify(details)))
+  );
 
-  qr.onload = function(){
-    const heading = document.createElement("div");
-    heading.style.fontSize = "12px";
-    heading.style.fontWeight = "bold";
-    heading.style.marginBottom = "5px";
-    heading.textContent = "Registration Details QR";
+  const url = REGISTRATION_URL + "?registration=" + encoded;
 
-    section.prepend(heading);
+  const img = document.createElement("img");
+  img.alt = "Registration Details QR Code";
 
+  img.onload = function(){
     const thanks = document.createElement("div");
     thanks.id = "qrThanks";
     thanks.textContent = "Thank You";
     section.appendChild(thanks);
-
     if(callback) callback(true);
   };
 
-  qr.onerror = function(){
-    section.innerHTML = "QR కోడ్ తయారు కాలేదు. ఇంటర్నెట్ తనిఖీ చేయండి.";
+  img.onerror = function(){
+    section.innerHTML = "QR కోడ్ తయారు కాలేదు.";
     if(callback) callback(false);
   };
 
-  qr.src = "https://api.qrserver.com/v1/create-qr-code/?size=350x350&margin=1&data=" + encodeURIComponent(data);
-  section.appendChild(qr);
+  img.src = "https://api.qrserver.com/v1/create-qr-code/?size=350x350&margin=1&data=" +
+            encodeURIComponent(url);
+
+  section.appendChild(img);
 }
