@@ -1,4 +1,5 @@
 
+
 function makeQR(callback){
   const section = document.getElementById("billQR");
   section.innerHTML = "";
