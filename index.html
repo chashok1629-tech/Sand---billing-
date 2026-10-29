@@ -1,138 +1,380 @@
 <!DOCTYPE html>
-<html lang="te">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AP Sand Management System - Registration Details</title>
+<title>Free Sand Information Details</title>
 
 <style>
-*{box-sizing:border-box}
-
-body{
-  font-family:Arial,sans-serif;
-  margin:0;
-  padding:15px;
-  background:#f2f2f2;
-  color:#000;
+* {
+  box-sizing: border-box;
 }
 
-.container{
-  max-width:500px;
-  margin:0 auto;
-  padding:20px;
-  background:#fff;
-  border:1px solid #ccc;
-  border-radius:8px;
+body {
+  margin: 0;
+  background: #f8f9fd;
+  color: #444;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-h2{
-  color:#075b32;
-  font-size:24px;
-  text-align:center;
-  margin-bottom:5px;
+/* HEADER */
+.top-header {
+  min-height: 102px;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 10px;
+  border-top: 4px solid #e8e5e9;
 }
 
-.heading{
-  text-align:center;
-  font-weight:bold;
-  margin-top:0;
+.logo {
+  width: 62px;
+  height: 88px;
+  object-fit: contain;
 }
 
-h3{
-  margin-top:22px;
-  color:#075b32;
-  text-align:center;
-  border-bottom:2px solid #075b32;
-  padding-bottom:10px;
+.header-text {
+  text-align: center;
 }
 
-.detail-row{
-  padding:12px 0;
-  border-bottom:1px solid #ddd;
-  overflow-wrap:anywhere;
+.header-title {
+  color: #079b58;
+  font-size: clamp(20px, 4.5vw, 38px);
+  font-weight: 900;
+  line-height: 1.1;
+  white-space: nowrap;
 }
 
-.label{
-  display:block;
-  font-weight:bold;
-  font-size:15px;
-  margin-bottom:5px;
+.department {
+  color: #222;
+  font-size: clamp(14px, 2.8vw, 25px);
+  font-weight: bold;
+  margin-top: 3px;
 }
 
-.value{
-  display:block;
-  font-size:16px;
-  line-height:1.5;
-  overflow-wrap:anywhere;
+.government {
+  font-size: 15px;
+  font-weight: bold;
 }
 
-.message{
-  margin-top:20px;
-  text-align:center;
-  font-size:14px;
-  color:#555;
+/* ORANGE TITLE */
+.page-title {
+  min-height: 75px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #ff790d;
+  font-size: clamp(25px, 5vw, 49px);
+  font-weight: bold;
+  background:
+    linear-gradient(135deg, #333 25%, #292929 25%, #383838 50%,
+    #292929 50%, #353535 75%, #292929 75%);
+  background-size: 90px 90px;
+  padding: 10px 5px;
+}
+
+/* MAIN CONTENT */
+.content {
+  padding: 42px 15px 35px;
+}
+
+.search-box {
+  width: 100%;
+  height: 58px;
+  border: 1px solid #e6d9b9;
+  background: #fff;
+  font-size: 18px;
+  padding: 10px;
+  outline-color: #f3ad18;
+}
+
+.buttons {
+  display: flex;
+  gap: 14px;
+  margin-top: 0;
+}
+
+.btn {
+  border: 0;
+  padding: 10px 18px;
+  font-size: 16px;
+  color: white;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.get-btn {
+  background: #f4b512;
+}
+
+.clear-btn {
+  background: #ef696e;
+}
+
+/* DETAILS PANEL */
+.details-panel {
+  position: relative;
+  overflow: hidden;
+  margin-top: 38px;
+  border: 3px solid #df9146;
+  border-radius: 22px;
+  background: #fff;
+}
+
+.details-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .45;
+  background:
+    radial-gradient(ellipse at 40% 65%,
+      rgba(210,210,210,.40) 0 2px, transparent 4px),
+    radial-gradient(ellipse at 70% 90%,
+      rgba(205,205,205,.35) 0 4px, transparent 7px),
+    linear-gradient(165deg,
+      transparent 45%, rgba(255,220,210,.28) 100%);
+  background-size: 35px 35px, 65px 65px, 100% 100%;
+}
+
+.consumer-heading {
+  position: relative;
+  display: inline-block;
+  margin: -1px 0 0 38px;
+  padding: 11px 20px;
+  color: #fff;
+  background: #f47b08;
+  border-radius: 30px;
+  font-size: 21px;
+  font-weight: bold;
+  z-index: 1;
+}
+
+.section-content {
+  position: relative;
+  padding: 0 18px 20px;
+}
+
+.detail-row {
+  min-height: 43px;
+  display: flex;
+  align-items: center;
+  font-size: 19px;
+  line-height: 1.35;
+  position: relative;
+}
+
+.detail-label {
+  width: 100%;
+}
+
+.detail-value {
+  overflow-wrap: anywhere;
+}
+
+.separator {
+  height: 2px;
+  background: #eee0b7;
+  margin: 24px 0 12px;
+  position: relative;
+}
+
+/* MOBILE */
+@media(max-width:480px) {
+  .top-header {
+    gap: 6px;
+    min-height: 83px;
+    padding: 5px;
+  }
+
+  .logo {
+    width: 43px;
+    height: 68px;
+  }
+
+  .government {
+    font-size: 11px;
+  }
+
+  .page-title {
+    min-height: 65px;
+  }
+
+  .content {
+    padding: 28px 9px;
+  }
+
+  .consumer-heading {
+    margin-left: 22px;
+    font-size: 17px;
+    padding: 10px 15px;
+  }
+
+  .section-content {
+    padding-left: 17px;
+    padding-right: 12px;
+  }
+
+  .detail-row {
+    font-size: 17px;
+    min-height: 40px;
+  }
 }
 </style>
 </head>
 
 <body>
-<div class="container">
 
-  <h2>AP SAND</h2>
-  <p class="heading">MANAGEMENT SYSTEM</p>
+<header class="top-header">
+  <img
+    class="logo"
+    src="3840px-Emblem_of_Andhra_Pradesh.svg.png"
+    alt="Andhra Pradesh Emblem"
+  >
 
-  <h3>Registration Details</h3>
-
-  <div class="detail-row">
-    <span class="label">Registration ID</span>
-    <span class="value" id="regId">-</span>
+  <div class="header-text">
+    <div class="header-title">
+      AP SAND MANAGEMENT SYSTEM
+    </div>
+    <div class="department">
+      Department of Mines &amp; Geology
+    </div>
+    <div class="government">
+      Government of Andhra Pradesh
+    </div>
   </div>
+</header>
 
-  <div class="detail-row">
-    <span class="label">Consumer Name</span>
-    <span class="value" id="consumerName">-</span>
-  </div>
-
-  <div class="detail-row">
-    <span class="label">Consumer Mobile No</span>
-    <span class="value" id="consumerMobile">-</span>
-  </div>
-
-  <div class="detail-row">
-    <span class="label">Construction Name</span>
-    <span class="value" id="constructionName">-</span>
-  </div>
-
-  <div class="detail-row">
-    <span class="label">Registration Date &amp; Time</span>
-    <span class="value" id="regDateTime">-</span>
-  </div>
-
-  <div class="detail-row">
-    <span class="label">Registration Type</span>
-    <span class="value" id="regType">-</span>
-  </div>
-
-  <div class="detail-row">
-    <span class="label">Registration QTY (in MT)</span>
-    <span class="value" id="regQty">-</span>
-  </div>
-
-  <div class="detail-row">
-    <span class="label">Registration Address</span>
-    <span class="value" id="regAddress">-</span>
-  </div>
-
-  <p class="message" id="message">
-    Registration details will appear here.
-  </p>
-
+<div class="page-title">
+  Free Sand Information Details
 </div>
 
-<script>
-(function(){
+<main class="content">
 
-  const params = new URLSearchParams(window.location.search);
+  <input
+    type="text"
+    id="searchId"
+    class="search-box"
+    aria-label="Registration ID"
+  >
+
+  <div class="buttons">
+    <button class="btn get-btn" onclick="getDetails()">
+      Get ➜
+    </button>
+
+    <button class="btn clear-btn" onclick="clearDetails()">
+      Clear ×
+    </button>
+  </div>
+
+  <section class="details-panel">
+
+    <div class="consumer-heading">
+      🛒 GENERAL CONSUMER
+    </div>
+
+    <div class="section-content">
+
+      <div class="detail-row">
+        <span class="detail-label">Registration ID</span>
+        <span class="detail-value" id="regId"></span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Consumer name</span>
+        <span class="detail-value" id="consumerName"></span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Consumer Mobile</span>
+        <span class="detail-value" id="consumerMobile"></span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Construction name</span>
+        <span class="detail-value" id="constructionName"></span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Registration Date</span>
+        <span class="detail-value" id="regDateTime"></span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Registration Type</span>
+        <span class="detail-value" id="regType"></span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Registration QTY(in MT)</span>
+        <span class="detail-value" id="regQty"></span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Registration Address</span>
+        <span class="detail-value" id="regAddress"></span>
+      </div>
+
+      <div class="separator"></div>
+
+      <div class="detail-row">
+        <span class="detail-label">Available Sand QTY(in MT)</span>
+        <span class="detail-value" id="availableQty"></span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Eligible Sand QTY(in MT)</span>
+        <span class="detail-value" id="eligibleQty"></span>
+      </div>
+
+      <div class="separator"></div>
+
+      <div class="detail-row">
+        <span class="detail-label">Dispatch ID</span>
+        <span class="detail-value" id="dispatchId"></span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Trip Number</span>
+        <span class="detail-value" id="tripNumber"></span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Vehicle Number/Type</span>
+        <span class="detail-value" id="vehicleNumber"></span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Driver Name/Mobile No</span>
+        <span class="detail-value" id="driverDetails"></span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Dispatch QTY(in MT)</span>
+        <span class="detail-value" id="dispatchQty"></span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Dispatch Date Time</span>
+        <span class="detail-value" id="dispatchDateTime"></span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Dispatch Address</span>
+        <span class="detail-value" id="dispatchAddress"></span>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<script>
+function getDetails() {
+  const params = new URLSearchParams(location.search);
 
   const fields = [
     "regId",
@@ -142,30 +384,54 @@ h3{
     "regDateTime",
     "regType",
     "regQty",
-    "regAddress"
+    "regAddress",
+    "availableQty",
+    "eligibleQty",
+    "dispatchId",
+    "tripNumber",
+    "vehicleNumber",
+    "driverDetails",
+    "dispatchQty",
+    "dispatchDateTime",
+    "dispatchAddress"
   ];
 
-  let hasDetails = false;
+  const searchId = document.getElementById("searchId").value.trim();
 
-  fields.forEach(function(id){
+  let found = false;
+
+  fields.forEach(function(id) {
+    const element = document.getElementById(id);
     const value = params.get(id);
 
-    if(value && value.trim() !== ""){
-      document.getElementById(id).textContent = value;
-      hasDetails = true;
+    if (value !== null && value !== "") {
+      element.textContent = value;
+      found = true;
+    } else {
+      element.textContent = "";
     }
   });
 
-  const message = document.getElementById("message");
-
-  if(hasDetails){
-    message.textContent = "Registration details loaded successfully.";
-  }else{
-    message.textContent =
-      "No registration details received. Please scan the QR code on your bill.";
+  if (!found && searchId !== "") {
+    alert(
+      "ఈ Registration ID కోసం వివరాలు ఈ పేజీకి అందలేదు. " +
+      "QR లింక్‌లో వివరాలు ఉండాలి లేదా నిజమైన డేటాబేస్ కనెక్షన్ అవసరం."
+    );
   }
+}
 
-})();
+function clearDetails() {
+  document.getElementById("searchId").value = "";
+
+  document.querySelectorAll(".detail-value").forEach(function(el) {
+    el.textContent = "";
+  });
+}
+
+/* QR లింక్‌లో వివరాలు ఉంటే ఆటోమేటిక్‌గా చూపిస్తుంది */
+if (location.search) {
+  getDetails();
+}
 </script>
 
 </body>
