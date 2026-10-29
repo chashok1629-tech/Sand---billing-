@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Free Sand Information Details</title>
+
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#f8f9fd;color:#444;font-family:Arial,Helvetica,sans-serif}
@@ -17,7 +17,6 @@ body{margin:0;background:#f8f9fd;color:#444;font-family:Arial,Helvetica,sans-ser
 .page-title{min-height:75px;display:flex;align-items:center;justify-content:center;text-align:center;color:#ff790d;font-size:clamp(25px,5vw,49px);font-weight:bold;background:linear-gradient(135deg,#333 25%,#292929 25%,#383838 50%,#292929 50%,#353535 75%,#292929 75%);background-size:90px 90px;padding:10px 5px}
 .content{padding:42px 15px 35px}
 .search-box{width:100%;height:58px;border:1px solid #e6d9b9;background:#fff;font-size:18px;padding:10px;outline-color:#f3ad18}
-.search-box::placeholder{color:#777;opacity:1}
 .buttons{display:flex;gap:14px;margin-top:0}
 .btn{border:0;padding:10px 18px;font-size:16px;color:white;cursor:pointer;border-radius:3px}
 .get-btn{background:#f4b512}
@@ -44,6 +43,7 @@ body{margin:0;background:#f8f9fd;color:#444;font-family:Arial,Helvetica,sans-ser
 }
 </style>
 </head>
+
 <body>
 <header class="top-header">
   <img class="logo" src="3840px-Emblem_of_Andhra_Pradesh.svg.png" alt="Andhra Pradesh Emblem">
@@ -55,16 +55,20 @@ body{margin:0;background:#f8f9fd;color:#444;font-family:Arial,Helvetica,sans-ser
 </header>
 
 <div class="page-title">Free Sand Information Details</div>
+
 <main class="content">
   <input type="text" id="searchId" class="search-box" placeholder="Registration ID" aria-label="Registration ID">
+
   <div class="buttons">
-    <button class="btn get-btn" id="getBtn">Get ➜</button>
-    <button class="btn clear-btn" id="clearBtn">Clear ×</button>
+    <button class="btn get-btn" id="getBtn" type="button">Get ➜</button>
+    <button class="btn clear-btn" id="clearBtn" type="button">Clear ×</button>
   </div>
+
   <div id="status" class="status" role="status"></div>
 
   <section class="details-panel">
     <div class="consumer-heading">🛒 GENERAL CONSUMER</div>
+
     <div class="section-content">
       <div class="detail-row"><span class="detail-label">Registration ID</span><span class="detail-value" id="regId"></span></div>
       <div class="detail-row"><span class="detail-label">Consumer name</span><span class="detail-value" id="consumerName"></span></div>
@@ -74,8 +78,10 @@ body{margin:0;background:#f8f9fd;color:#444;font-family:Arial,Helvetica,sans-ser
       <div class="detail-row"><span class="detail-label">Registration Type</span><span class="detail-value" id="regType"></span></div>
       <div class="detail-row"><span class="detail-label">Registration QTY(in MT)</span><span class="detail-value" id="regQty"></span></div>
       <div class="detail-row"><span class="detail-label">Registration Address</span><span class="detail-value" id="regAddress"></span></div>
+
       <div class="separator"></div>
       <div class="detail-row"><span class="detail-label">Eligible Sand QTY(in MT)</span><span class="detail-value" id="eligibleQty"></span></div>
+
       <div class="separator"></div>
       <div class="detail-row"><span class="detail-label">Dispatch ID</span><span class="detail-value" id="dispatchId"></span></div>
       <div class="detail-row"><span class="detail-label">Trip Number</span><span class="detail-value" id="tripNumber"></span></div>
@@ -90,10 +96,16 @@ body{margin:0;background:#f8f9fd;color:#444;font-family:Arial,Helvetica,sans-ser
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBAxO9XUQ2ChADnpZMFEFqgMYJmWsxxko8",
+  apiKey: "AIzaSyBAx9O9XU2QChADnpZMFEFqgMYJmWsxxko8",
   authDomain: "ap-sand-billing.firebaseapp.com",
   projectId: "ap-sand-billing",
   storageBucket: "ap-sand-billing.firebasestorage.app",
@@ -106,10 +118,22 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const fields = [
-  "regId","consumerName","consumerMobile","constructionName",
-  "regDateTime","regType","regQty","regAddress","eligibleQty",
-  "dispatchId","tripNumber","vehicleNumber","driverDetails",
-  "dispatchQty","dispatchDateTime","dispatchAddress"
+  ["regId", ["RegistrationID", "regId"]],
+  ["consumerName", ["ConsumerName", "consumerName"]],
+  ["consumerMobile", ["ConsumerMobile", "consumerMobile"]],
+  ["constructionName", ["ConstructionName", "constructionName"]],
+  ["regDateTime", ["RegistrationDateTime", "regDateTime"]],
+  ["regType", ["RegistrationType", "regType"]],
+  ["regQty", ["RegistrationQTY", "regQty"]],
+  ["regAddress", ["RegistrationAddress", "regAddress"]],
+  ["eligibleQty", ["eligibleQty", "EligibleSandQTY"]],
+  ["dispatchId", ["dispatchId", "DispatchID"]],
+  ["tripNumber", ["tripNumber", "TripNumber"]],
+  ["vehicleNumber", ["vehicleNumber", "VehicleNumber"]],
+  ["driverDetails", ["driverDetails", "DriverDetails"]],
+  ["dispatchQty", ["dispatchQty", "DispatchQTY"]],
+  ["dispatchDateTime", ["dispatchDateTime", "DispatchDateTime"]],
+  ["dispatchAddress", ["dispatchAddress", "DispatchAddress"]]
 ];
 
 const searchInput = document.getElementById("searchId");
@@ -121,61 +145,72 @@ function showStatus(message) {
 }
 
 function clearValues() {
-  fields.forEach(id => {
+  fields.forEach(([id]) => {
     document.getElementById(id).textContent = "";
   });
 }
 
-function showRecord(data) {
-  fields.forEach(id => {
-    const element = document.getElementById(id);
-    const value = data[id];
-    element.textContent = value == null ? "" : String(value);
-  });
-  searchInput.value = data.regId || searchInput.value;
+function firstValue(data, names) {
+  for (const name of names) {
+    if (data[name] !== undefined && data[name] !== null) {
+      return data[name];
+    }
+  }
+  return "";
 }
 
-function showUrlDetails() {
-  const params = new URLSearchParams(window.location.search);
-  const data = {};
-  fields.forEach(id => {
-    const value = params.get(id);
-    if (value !== null) data[id] = value;
+function showRecord(data, enteredId) {
+  fields.forEach(([id, names]) => {
+    document.getElementById(id).textContent =
+      String(firstValue(data, names));
   });
-  if (Object.keys(data).length > 0) {
-    showRecord(data);
-    showStatus("QR లింక్‌లో ఉన్న వివరాలు చూపిస్తున్నాయి.");
-    return true;
-  }
-  return false;
+
+  searchInput.value =
+    firstValue(data, ["RegistrationID", "regId"]) || enteredId;
 }
 
 async function getDetails() {
   const registrationId = searchInput.value.trim();
+
+  clearValues();
+
   if (!registrationId) {
     showStatus("దయచేసి Registration ID నమోదు చేయండి.");
     searchInput.focus();
     return;
   }
 
-  clearValues();
   showStatus("వివరాలు వెతుకుతున్నాం...");
   getButton.disabled = true;
 
   try {
-    const recordRef = doc(db, "registrations", registrationId);
-    const recordSnapshot = await getDoc(recordRef);
+    const registrationsRef = collection(db, "registrations");
 
-    if (!recordSnapshot.exists()) {
-      showStatus("ఈ Registration ID దొరకలేదు. ID తనిఖీ చేయండి.");
+    // Search by RegistrationID field first.
+    let result = await getDocs(query(
+      registrationsRef,
+      where("RegistrationID", "==", registrationId)
+    ));
+
+    // Also support older records using regId.
+    if (result.empty) {
+      result = await getDocs(query(
+        registrationsRef,
+        where("regId", "==", registrationId)
+      ));
+    }
+
+    if (result.empty) {
+      showStatus("ఈ Registration ID దొరకలేదు. Firebase‌లో ID తనిఖీ చేయండి.");
       return;
     }
 
-    showRecord(recordSnapshot.data());
+    showRecord(result.docs[0].data(), registrationId);
     showStatus("Registration Details లభించాయి.");
+
   } catch (error) {
     console.error(error);
-    showStatus("వివరాలు పొందలేకపోయాం. Firebase Rules మరియు ID తనిఖీ చేయండి.");
+    showStatus("వివరాలు పొందలేకపోయాం. Firebase Rules మరియు ఇంటర్నెట్ తనిఖీ చేయండి.");
   } finally {
     getButton.disabled = false;
   }
@@ -189,19 +224,19 @@ function clearDetails() {
 
 getButton.addEventListener("click", getDetails);
 document.getElementById("clearBtn").addEventListener("click", clearDetails);
+
 searchInput.addEventListener("keydown", event => {
   if (event.key === "Enter") getDetails();
 });
 
-if (window.location.search) {
-  const params = new URLSearchParams(window.location.search);
-  const registrationId = params.get("regId");
-  if (registrationId) {
-    searchInput.value = registrationId;
-    getDetails();
-  } else {
-    showUrlDetails();
-  }
+// A QR link such as details1.html?regId=TEST001
+// automatically loads the matching registration.
+const params = new URLSearchParams(window.location.search);
+const qrId = params.get("regId");
+
+if (qrId) {
+  searchInput.value = qrId;
+  getDetails();
 }
 </script>
 </body>
