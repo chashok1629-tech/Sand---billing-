@@ -1,1 +1,108 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Sand Information Details</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:16px;background:#f8f9fd;color:#333;font-family:Arial,sans-serif}
+.card{max-width:520px;margin:20px auto;background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 10px #ddd}
+h2{text-align:center;color:#164a8a}
+label{display:block;font-weight:bold;margin-top:13px}
+input{width:100%;padding:11px;margin-top:5px;border:1px solid #ccc;border-radius:5px}
+button{width:100%;padding:12px;margin-top:16px;background:#164a8a;color:white;border:0;border-radius:5px;font-size:16px}
+.item{padding:12px 0;border-bottom:1px solid #ddd;overflow-wrap:anywhere}
+.item b{display:block;margin-bottom:5px}
+#details{display:none}
+#message{color:#b00020;text-align:center}
+</style>
+</head>
+<body>
+<div class="card">
+<h2>Free Sand Information Details</h2>
+<label>Registration ID</label>
+<input id="regId" placeholder="Enter Registration ID">
+<button id="searchBtn">View Details</button>
+<p id="message"></p>
+<div id="details"></div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBAx9O9XU2QChADnpZMFEFqgMYJmWsxxko8",
+  authDomain: "ap-sand-billing.firebaseapp.com",
+  projectId: "ap-sand-billing",
+  storageBucket: "ap-sand-billing.firebasestorage.app",
+  messagingSenderId: "908803132126",
+  appId: "1:908803132126:web:04e7bdafaa6baf80bb104f",
+  measurementId: "G-RXHD8RW3WX"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const fields = [
+  ["regId","Registration ID"],
+  ["consumerName","Consumer Name"],
+  ["consumerMobile","Consumer Mobile No"],
+  ["constructionName","Construction Name"],
+  ["regDateTime","Registration Date & Time"],
+  ["regType","Registration Type"],
+  ["regQty","Registration QTY (in MT)"],
+  ["regAddress","Registration Address"]
+];
+
+const input = document.getElementById("regId");
+const message = document.getElementById("message");
+const output = document.getElementById("details");
+
+async function showDetails() {
+  const id = input.value.trim();
+  output.replaceChildren();
+  output.style.display = "none";
+  if (!id) {
+    message.textContent = "Please enter Registration ID.";
+    return;
+  }
+  message.textContent = "Loading...";
+  try {
+    const snap = await getDoc(doc(db, "registrations", id));
+    if (!snap.exists()) {
+      message.textContent = "Registration details not found.";
+      return;
+    }
+    const data = snap.data();
+    output.replaceChildren();
+    for (const [key, label] of fields) {
+      const row = document.createElement("div");
+      row.className = "item";
+      const name = document.createElement("b");
+      name.textContent = label;
+      const value = document.createElement("span");
+      value.textContent = data[key] == null ? "" : String(data[key]);
+      row.append(name, value);
+      output.append(row);
+    }
+    output.style.display = "block";
+    message.textContent = "";
+  } catch (e) {
+    console.error(e);
+    message.textContent = "Could not load details. Please check Firebase Rules and document ID.";
+  }
+}
+document.getElementById("searchBtn").addEventListener("click", showDetails);
+
+const params = new URLSearchParams(location.search);
+const qrId = params.get("regId");
+if (qrId) {
+  input.value = qrId;
+  showDetails();
+}
+</script>
+</body>
+</html>
+
