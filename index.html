@@ -4,21 +4,161 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sand Billing App</title>
+<title>AP Sand Billing App - Registration Details</title>
+
 <style>
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: Arial, sans-serif;
   text-align: center;
   padding: 20px;
+  margin: 0;
   background: #f2f2f2;
+  color: #000;
 }
-h2 { color: #075b32; }
+
+.container {
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+h2 {
+  color: #075b32;
+  font-size: 22px;
+}
+
+h3 {
+  margin-top: 20px;
+  color: #075b32;
+  border-bottom: 2px solid #075b32;
+  padding-bottom: 8px;
+}
+
+.details {
+  text-align: left;
+  margin-top: 15px;
+}
+
+.detail-row {
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+  overflow-wrap: anywhere;
+}
+
+.label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.value {
+  display: block;
+  font-size: 16px;
+}
+
+.message {
+  margin-top: 20px;
+  color: #555;
+  font-size: 14px;
+}
 </style>
 </head>
+
 <body>
-<h2>AP Sand Billing App</h2>
-<p>Website Successfully Opened</p>
-<p>మీ Sand Billing App పనిచేస్తోంది.</p>
+
+<div class="container">
+
+  <h2>AP SAND</h2>
+  <p><strong>MANAGEMENT SYSTEM</strong></p>
+
+  <h3>Registration Details</h3>
+
+  <div class="details" id="registrationDetails">
+
+    <div class="detail-row">
+      <span class="label">Registration ID</span>
+      <span class="value" id="regId">-</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="label">Consumer Name</span>
+      <span class="value" id="consumerName">-</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="label">Consumer Mobile No</span>
+      <span class="value" id="consumerMobile">-</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="label">Construction Name</span>
+      <span class="value" id="constructionName">-</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="label">Registration Date &amp; Time</span>
+      <span class="value" id="regDateTime">-</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="label">Registration Type</span>
+      <span class="value" id="regType">-</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="label">Registration QTY (in MT)</span>
+      <span class="value" id="regQty">-</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="label">Registration Address</span>
+      <span class="value" id="regAddress">-</span>
+    </div>
+
+  </div>
+
+  <p class="message" id="message">
+    Registration details will appear here.
+  </p>
+
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+
+const fields = {
+  regId: "regId",
+  consumerName: "consumerName",
+  consumerMobile: "consumerMobile",
+  constructionName: "constructionName",
+  regDateTime: "regDateTime",
+  regType: "regType",
+  regQty: "regQty",
+  regAddress: "regAddress"
+};
+
+let hasDetails = false;
+
+Object.entries(fields).forEach(([key, elementId]) => {
+  const value = params.get(key);
+  if (value && value.trim() !== "") {
+    document.getElementById(elementId).textContent = value;
+    hasDetails = true;
+  }
+});
+
+if (hasDetails) {
+  document.getElementById("message").textContent =
+    "Registration details loaded successfully.";
+}
+</script>
+
 </body>
 </html>
-
