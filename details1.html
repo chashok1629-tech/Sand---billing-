@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,86 +6,108 @@
 <title>Free Sand Information Details</title>
 
 <style>
-*{box-sizing:border-box}
-body{
-  margin:0;
-  padding:16px;
-  background:#f8f9fd;
-  color:#333;
-  font-family:Arial,sans-serif;
+* {
+  box-sizing: border-box;
 }
-.card{
-  max-width:520px;
-  margin:20px auto;
-  background:#fff;
-  padding:20px;
-  border-radius:10px;
-  box-shadow:0 2px 10px #ddd;
+
+body {
+  margin: 0;
+  padding: 16px;
+  background: #f8f9fd;
+  color: #333;
+  font-family: Arial, sans-serif;
 }
-h2{
-  text-align:center;
-  color:#164a8a;
+
+.card {
+  max-width: 520px;
+  margin: 20px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px #ddd;
 }
-label{
-  display:block;
-  font-weight:bold;
-  margin-top:13px;
+
+h2 {
+  text-align: center;
+  color: #164a8a;
 }
-input{
-  width:100%;
-  padding:11px;
-  margin-top:5px;
-  border:1px solid #ccc;
-  border-radius:5px;
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-top: 13px;
 }
-button{
-  width:100%;
-  padding:12px;
-  margin-top:16px;
-  background:#164a8a;
-  color:white;
-  border:0;
-  border-radius:5px;
-  font-size:16px;
+
+input {
+  width: 100%;
+  padding: 11px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
 }
-.item{
-  padding:12px 0;
-  border-bottom:1px solid #ddd;
-  overflow-wrap:anywhere;
+
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 16px;
+  background: #164a8a;
+  color: white;
+  border: 0;
+  border-radius: 5px;
+  font-size: 16px;
 }
-.item b{
-  display:block;
-  margin-bottom:5px;
+
+.item {
+  padding: 12px 0;
+  border-bottom: 1px solid #ddd;
+  overflow-wrap: anywhere;
 }
-#details{display:none}
-#message{
-  color:#b00020;
-  text-align:center;
+
+.item b {
+  display: block;
+  margin-bottom: 5px;
+  color: #164a8a;
+}
+
+#details {
+  display: none;
+  margin-top: 15px;
+}
+
+#message {
+  color: #b00020;
+  text-align: center;
+  overflow-wrap: anywhere;
 }
 </style>
 </head>
 
 <body>
 <div class="card">
-  <h2>Free Sand Information Details</h2>
 
-  <label>Registration ID</label>
-  <input id="regId" placeholder="Enter Registration ID">
+<h2>Free Sand Information Details</h2>
 
-  <button id="searchBtn">View Details</button>
+<label for="regId">Registration ID</label>
+<input id="regId" placeholder="Enter Registration ID">
 
-  <p id="message"></p>
-  <div id="details"></div>
+<button id="searchBtn" type="button">View Details</button>
+
+<p id="message"></p>
+<div id="details"></div>
+
 </div>
 
 <script type="module">
 import { initializeApp }
-  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
   getFirestore,
-  doc,
-  getDoc
+  collection,
+  query,
+  where,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -102,18 +123,15 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* మీ ప్రస్తుత Firebase Document ID */
-const DOCUMENT_ID = "czS7Hvp5o0HndRyhB57X";
-
 const fields = [
-  ["regId","Registration ID"],
-  ["consumerName","Consumer Name"],
-  ["consumerMobile","Consumer Mobile No"],
-  ["constructionName","Construction Name"],
-  ["regDateTime","Registration Date & Time"],
-  ["regType","Registration Type"],
-  ["regQty","Registration QTY (in MT)"],
-  ["regAddress","Registration Address"]
+  ["RegistrationID", "Registration ID"],
+  ["ConsumerName", "Consumer Name"],
+  ["ConsumerMobile", "Consumer Mobile No"],
+  ["ConstructionName", "Construction Name"],
+  ["RegistrationDateTime", "Registration Date & Time"],
+  ["RegistrationType", "Registration Type"],
+  ["RegistrationQTY", "Registration QTY (in MT)"],
+  ["RegistrationAddress", "Registration Address"]
 ];
 
 const input = document.getElementById("regId");
@@ -121,12 +139,12 @@ const message = document.getElementById("message");
 const output = document.getElementById("details");
 
 async function showDetails() {
+  const id = input.value.trim();
+
   output.replaceChildren();
   output.style.display = "none";
 
-  const enteredId = input.value.trim();
-
-  if (!enteredId) {
+  if (!id) {
     message.textContent = "Please enter Registration ID.";
     return;
   }
@@ -134,23 +152,22 @@ async function showDetails() {
   message.textContent = "Loading...";
 
   try {
-    /* ప్రస్తుత టెస్ట్ డాక్యుమెంట్‌ను చదువుతుంది */
-    const snap = await getDoc(
-      doc(db, "registrations", DOCUMENT_ID)
+    const registrationsRef = collection(db, "registrations");
+
+    const q = query(
+      registrationsRef,
+      where("RegistrationID", "==", id)
     );
 
-    if (!snap.exists()) {
-      message.textContent = "Firebase document not found.";
+    const result = await getDocs(q);
+
+    if (result.empty) {
+      message.textContent =
+        "Registration details not found. Please check the RegistrationID field in Firebase.";
       return;
     }
 
-    const data = snap.data();
-
-    /* నమోదు చేసిన Registration ID సరిపోలాలి */
-    if (String(data.regId || "") !== enteredId) {
-      message.textContent = "Registration ID does not match.";
-      return;
-    }
+    const data = result.docs[0].data();
 
     for (const [key, label] of fields) {
       const row = document.createElement("div");
@@ -173,15 +190,13 @@ async function showDetails() {
   } catch (error) {
     console.error(error);
     message.textContent =
-      "Could not load details. Check Firebase Rules and connection.";
+      "Could not load details. Please check Firebase Rules and internet connection.";
   }
 }
 
-document
-  .getElementById("searchBtn")
+document.getElementById("searchBtn")
   .addEventListener("click", showDetails);
 
-/* QR లింక్‌లో ?regId=TEST001 ఉంటే ఆటోమేటిక్‌గా చూపిస్తుంది */
 const params = new URLSearchParams(window.location.search);
 const qrId = params.get("regId");
 
@@ -190,5 +205,6 @@ if (qrId) {
   showDetails();
 }
 </script>
+
 </body>
 </html>
