@@ -3,636 +3,302 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Free Sand Information Details</title>
+<title>Registration Details - AP Sand</title>
 
 <style>
-*{box-sizing:border-box}
-
-body{
- margin:0;
- background:#f8f9fd;
- color:#444;
- font-family:Arial,Helvetica,sans-serif;
+* {
+  box-sizing: border-box;
 }
 
-.top-header{
- min-height:102px;
- background:#fff;
- display:flex;
- justify-content:center;
- align-items:center;
- gap:12px;
- padding:6px 10px;
- border-top:4px solid #e8e5e9;
+body {
+  margin: 0;
+  padding: 15px;
+  background: #f4f6fa;
+  color: #222;
+  font-family: Arial, sans-serif;
 }
 
-.logo{
- width:62px;
- height:88px;
- object-fit:contain;
+.container {
+  max-width: 650px;
+  margin: 15px auto;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px #00000012;
 }
 
-.header-text{text-align:center}
-
-.header-title{
- color:#079b58;
- font-size:clamp(20px,4.5vw,38px);
- font-weight:900;
- line-height:1.1;
+.header {
+  padding: 20px 12px;
+  text-align: center;
+  color: white;
+  background: #087b42;
 }
 
-.department{
- color:#222;
- font-size:clamp(14px,2.8vw,25px);
- font-weight:bold;
- margin-top:3px;
+.header h2 {
+  margin: 0 0 7px;
+  font-size: 22px;
 }
 
-.government{
- font-size:15px;
- font-weight:bold;
+.header p {
+  margin: 0;
+  font-size: 14px;
 }
 
-.page-title{
- min-height:75px;
- display:flex;
- align-items:center;
- justify-content:center;
- text-align:center;
- color:#ff790d;
- font-size:clamp(25px,5vw,49px);
- font-weight:bold;
- background:linear-gradient(
-  135deg,#333 25%,#292929 25%,#383838 50%,
-  #292929 50%,#353535 75%,#292929 75%
- );
- background-size:90px 90px;
- padding:10px 5px;
+.content {
+  padding: 15px;
 }
 
-.content{padding:42px 15px 35px}
-
-.search-box{
- width:100%;
- height:58px;
- border:1px solid #e6d9b9;
- background:#fff;
- font-size:18px;
- padding:10px;
- outline-color:#f3ad18;
+.row {
+  display: grid;
+  grid-template-columns: 42% 5% 53%;
+  padding: 12px 4px;
+  border-bottom: 1px solid #e5e5e5;
+  overflow-wrap: anywhere;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
-.buttons{
- display:flex;
- gap:14px;
- margin-top:0;
+.label {
+  font-weight: bold;
 }
 
-.btn{
- border:0;
- padding:10px 18px;
- font-size:16px;
- color:white;
- cursor:pointer;
- border-radius:3px;
+.colon {
+  text-align: center;
 }
 
-.get-btn{background:#f4b512}
-.clear-btn{background:#ef696e}
-
-.btn:disabled{
- opacity:.6;
- cursor:wait;
+.value {
+  overflow-wrap: anywhere;
 }
 
-.status{
- font-size:14px;
- margin-top:12px;
- overflow-wrap:anywhere;
+.status {
+  padding: 20px 10px;
+  text-align: center;
+  color: #555;
 }
 
-.details-panel{
- position:relative;
- overflow:hidden;
- margin-top:25px;
- border:3px solid #df9146;
- border-radius:22px;
- background:#fff;
+.footer {
+  padding: 12px;
+  text-align: center;
+  background: #f7f7f7;
+  color: #555;
+  font-size: 12px;
 }
 
-.details-panel::before{
- content:"";
- position:absolute;
- inset:0;
- pointer-events:none;
- opacity:.45;
- background:
-  radial-gradient(ellipse at 40% 65%,
-  rgba(210,210,210,.40) 0 2px,transparent 4px),
-  radial-gradient(ellipse at 70% 90%,
-  rgba(205,205,205,.35) 0 4px,transparent 7px),
-  linear-gradient(165deg,transparent 45%,
-  rgba(255,220,210,.28) 100%);
- background-size:35px 35px,65px 65px,100% 100%;
-}
+@media (max-width: 360px) {
+  .row {
+    grid-template-columns: 43% 5% 52%;
+    font-size: 12px;
+  }
 
-.consumer-heading{
- position:relative;
- display:inline-block;
- margin:-1px 0 0 38px;
- padding:11px 20px;
- color:#fff;
- background:#f47b08;
- border-radius:30px;
- font-size:21px;
- font-weight:bold;
- z-index:1;
-}
-
-.section-content{
- position:relative;
- padding:0 18px 20px;
-}
-
-.detail-row{
- min-height:43px;
- display:flex;
- align-items:center;
- justify-content:space-between;
- gap:12px;
- font-size:19px;
- line-height:1.35;
- position:relative;
-}
-
-.detail-label{flex:1}
-
-.detail-value{
- overflow-wrap:anywhere;
- text-align:right;
- max-width:55%;
-}
-
-.separator{
- height:2px;
- background:#eee0b7;
- margin:24px 0 12px;
- position:relative;
-}
-
-@media(max-width:480px){
- .top-header{
-  gap:6px;
-  min-height:83px;
-  padding:5px;
- }
- .logo{width:43px;height:68px}
- .government{font-size:11px}
- .header-title{
-  white-space:normal;
-  font-size:clamp(17px,4.5vw,22px);
- }
- .page-title{min-height:65px}
- .content{padding:28px 9px}
- .consumer-heading{
-  margin-left:22px;
-  font-size:17px;
-  padding:10px 15px;
- }
- .section-content{
-  padding-left:12px;
-  padding-right:10px;
- }
- .detail-row{
-  font-size:14px;
-  min-height:40px;
-  gap:8px;
- }
- .detail-value{max-width:52%}
+  .header h2 {
+    font-size: 19px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<header class="top-header">
- <img class="logo"
-      src="3840px-Emblem_of_Andhra_Pradesh.svg.png"
-      alt="Andhra Pradesh Emblem">
+<div class="container">
+  <div class="header">
+    <h2>AP SAND MANAGEMENT SYSTEM</h2>
+    <p>Registration Details</p>
+  </div>
 
- <div class="header-text">
-  <div class="header-title">AP SAND MANAGEMENT SYSTEM</div>
-  <div class="department">Department of Mines &amp; Geology</div>
-  <div class="government">Government of Andhra Pradesh</div>
- </div>
-</header>
+  <div id="status" class="status">
+    Loading registration details...
+  </div>
 
-<div class="page-title">Free Sand Information Details</div>
+  <div id="details" class="content" style="display:none;">
 
-<main class="content">
+    <div class="row">
+      <div class="label">Registration ID</div>
+      <div class="colon">:</div>
+      <div class="value" id="regId">-</div>
+    </div>
 
- <input
-  type="text"
-  id="searchId"
-  class="search-box"
-  placeholder="Registration ID"
-  aria-label="Registration ID"
-  autocomplete="off">
+    <div class="row">
+      <div class="label">Consumer Name</div>
+      <div class="colon">:</div>
+      <div class="value" id="consumerName">-</div>
+    </div>
 
- <div class="buttons">
-  <button class="btn get-btn" id="getBtn" type="button">
-   Get ➜
-  </button>
+    <div class="row">
+      <div class="label">Consumer Mobile No</div>
+      <div class="colon">:</div>
+      <div class="value" id="consumerMobile">-</div>
+    </div>
 
-  <button class="btn clear-btn" id="clearBtn" type="button">
-   Clear ×
-  </button>
- </div>
+    <div class="row">
+      <div class="label">Construction Name</div>
+      <div class="colon">:</div>
+      <div class="value" id="constructionName">-</div>
+    </div>
 
- <div id="status" class="status" role="status" aria-live="polite"></div>
+    <div class="row">
+      <div class="label">Registration Date &amp; Time</div>
+      <div class="colon">:</div>
+      <div class="value" id="regDateTime">-</div>
+    </div>
 
- <section class="details-panel">
-  <div class="consumer-heading">🛒 GENERAL CONSUMER</div>
+    <div class="row">
+      <div class="label">Registration Type</div>
+      <div class="colon">:</div>
+      <div class="value" id="regType">-</div>
+    </div>
 
-  <div class="section-content">
+    <div class="row">
+      <div class="label">Registration QTY (MT)</div>
+      <div class="colon">:</div>
+      <div class="value" id="regQty">-</div>
+    </div>
 
-   <div class="detail-row">
-    <span class="detail-label">Registration ID</span>
-    <span class="detail-value" id="regId"></span>
-   </div>
-
-   <div class="detail-row">
-    <span class="detail-label">Consumer name</span>
-    <span class="detail-value" id="consumerName"></span>
-   </div>
-
-   <div class="detail-row">
-    <span class="detail-label">Consumer Mobile</span>
-    <span class="detail-value" id="consumerMobile"></span>
-   </div>
-
-   <div class="detail-row">
-    <span class="detail-label">Construction name</span>
-    <span class="detail-value" id="constructionName"></span>
-   </div>
-
-   <div class="detail-row">
-    <span class="detail-label">Registration Date</span>
-    <span class="detail-value" id="regDateTime"></span>
-   </div>
-
-   <div class="detail-row">
-    <span class="detail-label">Registration Type</span>
-    <span class="detail-value" id="regType"></span>
-   </div>
-
-   <div class="detail-row">
-    <span class="detail-label">Registration QTY (in MT)</span>
-    <span class="detail-value" id="regQty"></span>
-   </div>
-
-   <div class="detail-row">
-    <span class="detail-label">Registration Address</span>
-    <span class="detail-value" id="regAddress"></span>
-   </div>
-
-   <div class="separator"></div>
-
-   <div class="detail-row">
-    <span class="detail-label">Eligible Sand QTY (in MT)</span>
-    <span class="detail-value" id="eligibleQty"></span>
-   </div>
-
-   <div class="separator"></div>
-
-   <div class="detail-row">
-    <span class="detail-label">Dispatch ID</span>
-    <span class="detail-value" id="dispatchId"></span>
-   </div>
-
-   <div class="detail-row">
-    <span class="detail-label">Trip Number</span>
-    <span class="detail-value" id="tripNumber"></span>
-   </div>
-
-   <div class="detail-row">
-    <span class="detail-label">Vehicle Number/Type</span>
-    <span class="detail-value" id="vehicleNumber"></span>
-   </div>
-
-   <div class="detail-row">
-    <span class="detail-label">Driver Name/Mobile No</span>
-    <span class="detail-value" id="driverDetails"></span>
-   </div>
-
-   <div class="detail-row">
-    <span class="detail-label">Dispatch QTY (in MT)</span>
-    <span class="detail-value" id="dispatchQty"></span>
-   </div>
-
-   <div class="detail-row">
-    <span class="detail-label">Dispatch Date Time</span>
-    <span class="detail-value" id="dispatchDateTime"></span>
-   </div>
-
-   <div class="detail-row">
-    <span class="detail-label">Dispatch Address</span>
-    <span class="detail-value" id="dispatchAddress"></span>
-   </div>
+    <div class="row">
+      <div class="label">Registration Address</div>
+      <div class="colon">:</div>
+      <div class="value" id="regAddress">-</div>
+    </div>
 
   </div>
- </section>
-</main>
+
+  <div class="footer">
+    AP Sand Management System
+  </div>
+</div>
 
 <script type="module">
-import { initializeApp }
- from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
- getFirestore,
- collection,
- query,
- where,
- getDocs,
- doc,
- getDoc
+  getFirestore,
+  collection,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
- apiKey: "AIzaSyBAx9O9XU2QChADnpZMFEFqgMYJmWsxxko8",
- authDomain: "ap-sand-billing.firebaseapp.com",
- projectId: "ap-sand-billing",
- storageBucket: "ap-sand-billing.firebasestorage.app",
- messagingSenderId: "908803132126",
- appId: "1:908803132126:web:04e7bdafaa6baf80bb104f",
- measurementId: "G-RXHD8RW3WX"
+  apiKey: "AIzaSyBAx9O9XU2QChADnpZMFEFqgMYJmWsxxko8",
+  authDomain: "ap-sand-billing.firebaseapp.com",
+  projectId: "ap-sand-billing",
+  storageBucket: "ap-sand-billing.firebasestorage.app",
+  messagingSenderId: "908803132126",
+  appId: "1:908803132126:web:04e7bdafaa6baf80bb104f",
+  measurementId: "G-RXHD8RW3WX"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const fields = [
- ["regId", [
-  "RegistrationID", "regId", "registrationId"
- ]],
-
- ["consumerName", [
-  "ConsumerName", "consumerName", "consumer_name"
- ]],
-
- ["consumerMobile", [
-  "ConsumerMobile", "consumerMobile",
-  "ConsumerMobileNo", "consumerMobileNo",
-  "consumerMobileNumber"
- ]],
-
- ["constructionName", [
-  "ConstructionName", "constructionName",
-  "construction", "constructionPlace"
- ]],
-
- ["regDateTime", [
-  "RegistrationDateTime", "regDateTime",
-  "registrationDateTime", "RegistrationDate",
-  "registrationDate"
- ]],
-
- ["regType", [
-  "RegistrationType", "regType", "registrationType"
- ]],
-
- ["regQty", [
-  "RegistrationQTY", "regQty",
-  "registrationQTY", "registrationQty",
-  "RegistrationQuantity"
- ]],
-
- ["regAddress", [
-  "RegistrationAddress", "regAddress",
-  "registrationAddress", "address"
- ]],
-
- ["eligibleQty", [
-  "eligibleQty", "EligibleSandQTY",
-  "eligibleSandQty", "EligibleSandQty"
- ]],
-
- ["dispatchId", [
-  "dispatchId", "DispatchID", "DispatchId"
- ]],
-
- ["tripNumber", [
-  "tripNumber", "TripNumber"
- ]],
-
- ["vehicleNumber", [
-  "vehicleNumber", "VehicleNumber",
-  "VehicleNumberType"
- ]],
-
- ["driverDetails", [
-  "driverDetails", "DriverDetails",
-  "driverNameMobile", "DriverNameMobile"
- ]],
-
- ["dispatchQty", [
-  "dispatchQty", "DispatchQTY",
-  "DispatchQty", "dispatchQuantity"
- ]],
-
- ["dispatchDateTime", [
-  "dispatchDateTime", "DispatchDateTime"
- ]],
-
- ["dispatchAddress", [
-  "dispatchAddress", "DispatchAddress"
- ]]
+  ["regId", "Registration ID"],
+  ["consumerName", "Consumer Name"],
+  ["consumerMobile", "Consumer Mobile No"],
+  ["constructionName", "Construction Name"],
+  ["regDateTime", "Registration Date & Time"],
+  ["regType", "Registration Type"],
+  ["regQty", "Registration QTY (MT)"],
+  ["regAddress", "Registration Address"]
 ];
 
-const searchInput = document.getElementById("searchId");
-const statusBox = document.getElementById("status");
-const getButton = document.getElementById("getBtn");
-const clearButton = document.getElementById("clearBtn");
+function showDetails(data) {
+  for (const [id, label] of fields) {
+    const value = data[id];
+    document.getElementById(id).textContent =
+      value !== undefined && value !== null && value !== ""
+        ? String(value)
+        : "-";
+  }
 
-function showStatus(message) {
- statusBox.textContent = message;
+  document.getElementById("status").style.display = "none";
+  document.getElementById("details").style.display = "block";
 }
 
-function clearValues() {
- fields.forEach(([id]) => {
-  document.getElementById(id).textContent = "";
- });
-}
-
-function normalizeId(value) {
- return String(value ?? "").trim().toLowerCase();
-}
-
-function firstValue(data, names) {
- for (const name of names) {
-  if (data[name] !== undefined && data[name] !== null) {
-   const value = data[name];
-
-   if (value && typeof value.toDate === "function") {
-    return value.toDate().toLocaleString("en-IN");
-   }
-
-   if (value instanceof Date) {
-    return value.toLocaleString("en-IN");
-   }
-
-   if (typeof value === "object") {
-    if (value.seconds !== undefined) {
-     return new Date(value.seconds * 1000).toLocaleString("en-IN");
+function getParam(params, ...names) {
+  for (const name of names) {
+    const value = params.get(name);
+    if (value !== null && value.trim() !== "") {
+      return value.trim();
     }
-    continue;
-   }
-
-   return String(value);
   }
- }
- return "";
+  return "";
 }
 
-function showRecord(data, enteredId) {
- fields.forEach(([id, names]) => {
-  document.getElementById(id).textContent =
-   firstValue(data, names);
- });
+async function loadDetails() {
+  const params = new URLSearchParams(window.location.search);
 
- searchInput.value =
-  firstValue(data, [
-   "RegistrationID", "regId", "registrationId"
-  ]) || enteredId;
-}
+  const data = {
+    regId: getParam(params, "regId", "RegistrationID", "registrationId"),
+    consumerName: getParam(params, "consumerName", "ConsumerName"),
+    consumerMobile: getParam(params, "consumerMobile", "ConsumerMobile"),
+    constructionName: getParam(params, "constructionName", "ConstructionName"),
+    regDateTime: getParam(params, "regDateTime", "RegistrationDateTime"),
+    regType: getParam(params, "regType", "RegistrationType"),
+    regQty: getParam(params, "regQty", "RegistrationQTY"),
+    regAddress: getParam(params, "regAddress", "RegistrationAddress")
+  };
 
-async function findByField(registrationsRef, fieldName, id) {
- const result = await getDocs(
-  query(registrationsRef, where(fieldName, "==", id))
- );
+  // QR URLలో రిజిస్ట్రేషన్ వివరాలు ఉంటే వాటినే చూపిస్తుంది.
+  const hasDetails = fields.some(([id]) => data[id] !== "");
 
- return result.empty ? null : result.docs[0];
-}
-
-async function getDetails() {
- const registrationId = searchInput.value.trim();
-
- clearValues();
-
- if (!registrationId) {
-  showStatus("దయచేసి Registration ID నమోదు చేయండి.");
-  searchInput.focus();
-  return;
- }
-
- showStatus("వివరాలు వెతుకుతున్నాం...");
- getButton.disabled = true;
-
- try {
-  const registrationsRef = collection(db, "registrations");
-  let foundDoc = null;
-
-  // 1. Firestore document ID ద్వారా వెతకడం
-  const directDoc = await getDoc(
-   doc(db, "registrations", registrationId)
-  );
-
-  if (directDoc.exists()) {
-   foundDoc = directDoc;
+  if (hasDetails) {
+    showDetails(data);
+    return;
   }
 
-  // 2. Registration ID field పేర్ల ద్వారా వెతకడం
-  const idFields = [
-   "RegistrationID",
-   "regId",
-   "registrationId"
-  ];
+  // URLలో Registration ID మాత్రమే ఉంటే Firebaseలో వెతుకుతుంది.
+  if (data.regId) {
+    try {
+      const snapshot = await getDocs(collection(db, "registrations"));
+      let found = null;
 
-  for (const fieldName of idFields) {
-   if (foundDoc) break;
+      snapshot.forEach((doc) => {
+        const record = doc.data();
 
-   foundDoc = await findByField(
-    registrationsRef,
-    fieldName,
-    registrationId
-   );
-  }
+        const recordId =
+          record.RegistrationID ??
+          record.registrationId ??
+          record.regId ??
+          "";
 
-  // 3. అక్షరాల పెద్ద/చిన్న తేడా ఉన్నప్పుడు fallback
-  if (!foundDoc) {
-   const allRecords = await getDocs(registrationsRef);
+        if (
+          String(recordId).trim().toLowerCase() ===
+          data.regId.trim().toLowerCase()
+        ) {
+          found = record;
+        }
+      });
 
-   for (const item of allRecords.docs) {
-    const data = item.data();
-
-    const storedId = firstValue(data, [
-     "RegistrationID", "regId", "registrationId"
-    ]);
-
-    if (normalizeId(storedId) === normalizeId(registrationId)) {
-     foundDoc = item;
-     break;
+      if (found) {
+        showDetails({
+          regId: found.RegistrationID ?? found.registrationId ?? found.regId,
+          consumerName: found.ConsumerName ?? found.consumerName,
+          consumerMobile: found.ConsumerMobile ?? found.consumerMobile,
+          constructionName: found.ConstructionName ?? found.constructionName,
+          regDateTime: found.RegistrationDateTime ?? found.regDateTime,
+          regType: found.RegistrationType ?? found.regType,
+          regQty: found.RegistrationQTY ?? found.regQty,
+          regAddress: found.RegistrationAddress ?? found.regAddress
+        });
+      } else {
+        document.getElementById("status").textContent =
+          "Registration details not found.";
+      }
+    } catch (error) {
+      console.error(error);
+      document.getElementById("status").textContent =
+        "Unable to load details. Please check your internet connection.";
     }
-   }
+
+    return;
   }
 
-  if (!foundDoc) {
-   showStatus(
-    "ఈ Registration ID దొరకలేదు. " +
-    "Firebase registrations Collection‌లో ID తనిఖీ చేయండి."
-   );
-   return;
-  }
-
-  showRecord(foundDoc.data(), registrationId);
-  showStatus("Registration Details విజయవంతంగా లభించాయి.");
-
- } catch (error) {
-  console.error("Firebase error:", error);
-
-  if (error.code === "permission-denied") {
-   showStatus(
-    "Firebase అనుమతి నిరాకరించబడింది. Firestore Rules తనిఖీ చేయండి."
-   );
-  } else {
-   showStatus(
-    "వివరాలు పొందలేకపోయాం. ఇంటర్నెట్, Firebase సెట్టింగులు తనిఖీ చేయండి."
-   );
-  }
-
- } finally {
-  getButton.disabled = false;
- }
+  document.getElementById("status").textContent =
+    "Registration details are not available in this link.";
 }
 
-function clearDetails() {
- searchInput.value = "";
- clearValues();
- showStatus("");
-}
-
-getButton.addEventListener("click", getDetails);
-clearButton.addEventListener("click", clearDetails);
-
-searchInput.addEventListener("keydown", event => {
- if (event.key === "Enter") {
-  getDetails();
- }
-});
-
-// QR link ఉదాహరణ:
-// details1.html?regId=GC18A0066-1D8
-// registrationId అనే parameter కూడా పనిచేస్తుంది.
-const params = new URLSearchParams(window.location.search);
-const qrId =
- params.get("regId") ||
- params.get("registrationId") ||
- params.get("id");
-
-if (qrId) {
- searchInput.value = qrId;
- getDetails();
-}
+loadDetails();
 </script>
 
 </body>
