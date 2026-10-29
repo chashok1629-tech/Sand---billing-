@@ -4,114 +4,170 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Registration Details - AP Sand Management System</title>
+<title>AP Sand Registration Details</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;padding:15px;background:#f1f3f5;color:#222;font-family:Arial,sans-serif}
-.card{max-width:600px;margin:15px auto;background:#fff;border:1px solid #ddd;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px #0001}
-.header{background:#176b43;color:white;padding:20px 12px;text-align:center}
-.header h2{margin:0;font-size:22px}
-.header p{margin:7px 0 0;font-size:14px}
-.content{padding:15px}
-.section{margin:5px 0 12px;padding:10px;background:#eaf4ee;color:#176b43;font-weight:bold}
-.item{display:grid;grid-template-columns:43% 57%;gap:8px;padding:12px 4px;border-bottom:1px solid #ddd;align-items:start}
-.label{font-weight:bold;font-size:14px;overflow-wrap:anywhere}
-.value{font-size:15px;overflow-wrap:anywhere;white-space:pre-wrap}
-.status{padding:15px;text-align:center;color:#a11;font-weight:bold}
-.footer{text-align:center;padding:14px;color:#555;font-size:12px}
-@media(max-width:360px){.item{grid-template-columns:40% 60%}.label,.value{font-size:13px}}
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 15px;
+  font-family: Arial, sans-serif;
+  background: #f1f3f5;
+  color: #111;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.header {
+  background: #075b32;
+  color: white;
+  text-align: center;
+  padding: 18px 10px;
+}
+
+.header h2 {
+  margin: 0 0 6px;
+  font-size: 21px;
+}
+
+.header p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.content {
+  padding: 16px;
+}
+
+h3 {
+  margin: 0 0 14px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #075b32;
+}
+
+.detail {
+  display: grid;
+  grid-template-columns: 42% 5% 53%;
+  gap: 0;
+  padding: 11px 0;
+  border-bottom: 1px solid #ddd;
+  overflow-wrap: anywhere;
+  line-height: 1.45;
+}
+
+.label {
+  font-weight: bold;
+}
+
+.colon {
+  text-align: center;
+}
+
+.value {
+  text-align: left;
+  white-space: pre-wrap;
+}
+
+.message {
+  padding: 20px;
+  text-align: center;
+  color: #a00000;
+}
+
+.footer {
+  text-align: center;
+  padding: 12px;
+  font-size: 12px;
+  color: #555;
+}
+
+@media print {
+  body {
+    padding: 0;
+    background: white;
+  }
+
+  .container {
+    border: none;
+    border-radius: 0;
+  }
+}
 </style>
 </head>
-<body>
-<div class="card">
-  <div class="header">
-    <h2>AP SAND MANAGEMENT SYSTEM</h2>
-    <p>Registration &amp; Dispatch Details</p>
-  </div>
-  <div id="status" class="status">Loading details...</div>
-  <div class="content" id="details" hidden>
-    <div class="section">Registration Details</div>
-    <div class="item"><div class="label">Registration ID</div><div class="value" id="regId"></div></div>
-    <div class="item"><div class="label">Consumer Name</div><div class="value" id="consumerName"></div></div>
-    <div class="item"><div class="label">Consumer Mobile</div><div class="value" id="consumerMobile"></div></div>
-    <div class="item"><div class="label">Construction Name</div><div class="value" id="constructionName"></div></div>
-    <div class="item"><div class="label">Registration Date &amp; Time</div><div class="value" id="regDateTime"></div></div>
-    <div class="item"><div class="label">Registration Type</div><div class="value" id="regType"></div></div>
-    <div class="item"><div class="label">Registration QTY (in MT)</div><div class="value" id="regQty"></div></div>
-    <div class="item"><div class="label">Registration Address</div><div class="value" id="regAddress"></div></div>
 
-    <div class="section">Dispatch Details</div>
-    <div class="item"><div class="label">Eligible Sand QTY (in MT)</div><div class="value" id="eligibleQty"></div></div>
-    <div class="item"><div class="label">Dispatch ID</div><div class="value" id="dispatchId"></div></div>
-    <div class="item"><div class="label">Trip Number</div><div class="value" id="tripNumber"></div></div>
-    <div class="item"><div class="label">Vehicle Number / Type</div><div class="value" id="vehicleNumber"></div></div>
-    <div class="item"><div class="label">Driver Name / Mobile</div><div class="value" id="driverDetails"></div></div>
-    <div class="item"><div class="label">Dispatch QTY (in MT)</div><div class="value" id="dispatchQty"></div></div>
-    <div class="item"><div class="label">Dispatch Date &amp; Time</div><div class="value" id="dispatchDateTime"></div></div>
-    <div class="item"><div class="label">Dispatch Address</div><div class="value" id="dispatchAddress"></div></div>
+<body>
+
+<div class="container" id="page">
+  <div class="header">
+    <h2>AP SAND</h2>
+    <p>MANAGEMENT SYSTEM</p>
   </div>
-  <div class="footer">AP Sand Management System</div>
+
+  <div class="content">
+    <h3>Registration Details</h3>
+    <div id="details"></div>
+  </div>
+
+  <div class="footer">
+    AP Sand Management System
+  </div>
 </div>
 
 <script>
-(function(){
-  const status=document.getElementById("status");
-  const details=document.getElementById("details");
+const fields = [
+  ["Registration ID", "rid"],
+  ["Consumer Name", "name"],
+  ["Consumer Mobile No", "mobile"],
+  ["Construction Name", "construction"],
+  ["Registration Date & Time", "date"],
+  ["Registration Type", "type"],
+  ["Registration QTY (MT)", "qty"],
+  ["Registration Address", "address"]
+];
 
-  function showError(message){
-    status.hidden=false;
-    status.textContent=message;
-    details.hidden=true;
-  }
+const params = new URLSearchParams(window.location.search);
+const details = document.getElementById("details");
 
-  function readHash(){
-    const prefix="#registration=";
-    const hash=window.location.hash||"";
-    if(!hash.startsWith(prefix)) return null;
+function addText(parent, tag, className, value) {
+  const el = document.createElement(tag);
+  el.className = className;
+  el.textContent = value;
+  parent.appendChild(el);
+}
 
-    try{
-      const encoded=hash.slice(prefix.length);
-      const binary=atob(encoded);
-      const bytes=Uint8Array.from(binary,ch=>ch.charCodeAt(0));
-      return JSON.parse(new TextDecoder("utf-8").decode(bytes));
-    }catch(error){
-      return null;
-    }
-  }
+const hasDetails = fields.some(([label, key]) =>
+  (params.get(key) || "").trim() !== ""
+);
 
-  function showDetails(data){
-    if(!data || !data.regId || data.regId==="-"){
-      showError("Registration ID లేదు. సరైన QR Code స్కాన్ చేయండి.");
-      return;
-    }
+if (!hasDetails) {
+  const msg = document.createElement("div");
+  msg.className = "message";
+  msg.textContent =
+    "Registration details are not available. Please scan the correct QR code.";
+  details.appendChild(msg);
+} else {
+  fields.forEach(([label, key]) => {
+    const row = document.createElement("div");
+    row.className = "detail";
 
-    const fields=[
-      "regId","consumerName","consumerMobile","constructionName",
-      "regDateTime","regType","regQty","regAddress",
-      "eligibleQty","dispatchId","tripNumber","vehicleNumber",
-      "driverDetails","dispatchQty","dispatchDateTime","dispatchAddress"
-    ];
+    addText(row, "div", "label", label);
+    addText(row, "div", "colon", ":");
+    addText(row, "div", "value", params.get(key) || "-");
 
-    fields.forEach(key=>{
-      const el=document.getElementById(key);
-      const value=data[key];
-      el.textContent=(value!==undefined && value!==null && String(value).trim()!=="")
-        ? String(value) : "-";
-    });
-
-    status.hidden=true;
-    details.hidden=false;
-  }
-
-  function loadDetails(){
-    const data=readHash();
-    if(data) showDetails(data);
-    else showError("వివరాలు అందలేదు. బిల్‌లోని QR Code ద్వారా వచ్చిన లింక్‌ను తెరవండి.");
-  }
-
-  loadDetails();
-  window.addEventListener("hashchange",loadDetails);
-})();
+    details.appendChild(row);
+  });
+}
 </script>
+
 </body>
 </html>
