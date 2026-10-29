@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,94 +7,80 @@
 <title>Registration Details - AP Sand</title>
 
 <style>
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  padding:15px;
+  background:#f4f6fa;
+  color:#222;
+  font-family:Arial,sans-serif;
 }
 
-body {
-  margin: 0;
-  padding: 15px;
-  background: #f4f6fa;
-  color: #222;
-  font-family: Arial, sans-serif;
+.container{
+  max-width:650px;
+  margin:15px auto;
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:8px;
+  overflow:hidden;
+  box-shadow:0 2px 8px #00000012;
 }
 
-.container {
-  max-width: 650px;
-  margin: 15px auto;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px #00000012;
+.header{
+  padding:20px 12px;
+  text-align:center;
+  color:#fff;
+  background:#087b42;
 }
 
-.header {
-  padding: 20px 12px;
-  text-align: center;
-  color: white;
-  background: #087b42;
+.header h2{
+  margin:0 0 7px;
+  font-size:22px;
 }
 
-.header h2 {
-  margin: 0 0 7px;
-  font-size: 22px;
+.header p{
+  margin:0;
+  font-size:14px;
 }
 
-.header p {
-  margin: 0;
-  font-size: 14px;
+.content{padding:15px}
+
+.row{
+  display:grid;
+  grid-template-columns:42% 5% 53%;
+  padding:12px 4px;
+  border-bottom:1px solid #e5e5e5;
+  overflow-wrap:anywhere;
+  font-size:14px;
+  line-height:1.5;
 }
 
-.content {
-  padding: 15px;
+.label{font-weight:bold}
+.colon{text-align:center}
+.value{overflow-wrap:anywhere}
+
+.status{
+  padding:20px 10px;
+  text-align:center;
+  color:#555;
+  overflow-wrap:anywhere;
 }
 
-.row {
-  display: grid;
-  grid-template-columns: 42% 5% 53%;
-  padding: 12px 4px;
-  border-bottom: 1px solid #e5e5e5;
-  overflow-wrap: anywhere;
-  font-size: 14px;
-  line-height: 1.5;
+.footer{
+  padding:12px;
+  text-align:center;
+  background:#f7f7f7;
+  color:#555;
+  font-size:12px;
 }
 
-.label {
-  font-weight: bold;
-}
-
-.colon {
-  text-align: center;
-}
-
-.value {
-  overflow-wrap: anywhere;
-}
-
-.status {
-  padding: 20px 10px;
-  text-align: center;
-  color: #555;
-}
-
-.footer {
-  padding: 12px;
-  text-align: center;
-  background: #f7f7f7;
-  color: #555;
-  font-size: 12px;
-}
-
-@media (max-width: 360px) {
-  .row {
-    grid-template-columns: 43% 5% 52%;
-    font-size: 12px;
+@media(max-width:360px){
+  .row{
+    grid-template-columns:43% 5% 52%;
+    font-size:12px;
   }
-
-  .header h2 {
-    font-size: 19px;
-  }
+  .header h2{font-size:19px}
 }
 </style>
 </head>
@@ -101,6 +88,7 @@ body {
 <body>
 
 <div class="container">
+
   <div class="header">
     <h2>AP SAND MANAGEMENT SYSTEM</h2>
     <p>Registration Details</p>
@@ -110,7 +98,7 @@ body {
     Loading registration details...
   </div>
 
-  <div id="details" class="content" style="display:none;">
+  <div id="details" class="content" style="display:none">
 
     <div class="row">
       <div class="label">Registration ID</div>
@@ -165,12 +153,12 @@ body {
   <div class="footer">
     AP Sand Management System
   </div>
+
 </div>
 
 <script type="module">
-import {
-  initializeApp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
   getFirestore,
@@ -191,111 +179,162 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const fields = [
-  ["regId", "Registration ID"],
-  ["consumerName", "Consumer Name"],
-  ["consumerMobile", "Consumer Mobile No"],
-  ["constructionName", "Construction Name"],
-  ["regDateTime", "Registration Date & Time"],
-  ["regType", "Registration Type"],
-  ["regQty", "Registration QTY (MT)"],
-  ["regAddress", "Registration Address"]
-];
+const fieldKeys = {
+  regId: ["regId", "RegistrationID", "registrationId"],
+  consumerName: ["consumerName", "ConsumerName"],
+  consumerMobile: ["consumerMobile", "ConsumerMobile"],
+  constructionName: ["constructionName", "ConstructionName"],
+  regDateTime: ["regDateTime", "RegistrationDateTime"],
+  regType: ["regType", "RegistrationType"],
+  regQty: ["regQty", "RegistrationQTY"],
+  regAddress: ["regAddress", "RegistrationAddress"]
+};
+
+function showStatus(message) {
+  document.getElementById("status").textContent = message;
+  document.getElementById("status").style.display = "block";
+  document.getElementById("details").style.display = "none";
+}
 
 function showDetails(data) {
-  for (const [id, label] of fields) {
-    const value = data[id];
-    document.getElementById(id).textContent =
-      value !== undefined && value !== null && value !== ""
-        ? String(value)
-        : "-";
+  for (const id of Object.keys(fieldKeys)) {
+    let value = "";
+
+    for (const key of fieldKeys[id]) {
+      if (
+        data[key] !== undefined &&
+        data[key] !== null &&
+        String(data[key]).trim() !== ""
+      ) {
+        value = String(data[key]);
+        break;
+      }
+    }
+
+    document.getElementById(id).textContent = value || "-";
   }
 
   document.getElementById("status").style.display = "none";
   document.getElementById("details").style.display = "block";
 }
 
-function getParam(params, ...names) {
-  for (const name of names) {
-    const value = params.get(name);
-    if (value !== null && value.trim() !== "") {
-      return value.trim();
+function decodeRegistrationHash() {
+  const hash = window.location.hash;
+
+  if (!hash.startsWith("#registration=")) {
+    return null;
+  }
+
+  try {
+    let encoded = hash.substring("#registration=".length);
+    encoded = decodeURIComponent(encoded);
+
+    const binary = atob(encoded);
+    const bytes = Uint8Array.from(
+      binary,
+      character => character.charCodeAt(0)
+    );
+
+    const json = new TextDecoder().decode(bytes);
+    return JSON.parse(json);
+  } catch (error) {
+    console.error("QR data decode error:", error);
+    return null;
+  }
+}
+
+function getURLDetails() {
+  const params = new URLSearchParams(window.location.search);
+  const data = {};
+
+  for (const id of Object.keys(fieldKeys)) {
+    for (const key of fieldKeys[id]) {
+      const value = params.get(key);
+
+      if (value !== null && value.trim() !== "") {
+        data[id] = value.trim();
+        break;
+      }
     }
   }
-  return "";
+
+  return data;
+}
+
+async function findFirebaseDetails(regId) {
+  const snapshot = await getDocs(collection(db, "registrations"));
+  let found = null;
+
+  snapshot.forEach(doc => {
+    const record = doc.data();
+
+    const recordId =
+      record.RegistrationID ??
+      record.registrationId ??
+      record.regId ??
+      "";
+
+    if (
+      String(recordId).trim().toLowerCase() ===
+      regId.trim().toLowerCase()
+    ) {
+      found = record;
+    }
+  });
+
+  return found;
 }
 
 async function loadDetails() {
+  // మొదట QRలో నేరుగా ఉన్న వివరాలు చదవాలి.
+  const hashData = decodeRegistrationHash();
+
+  if (hashData && typeof hashData === "object") {
+    showDetails(hashData);
+    return;
+  }
+
+  // తరువాత URL parameters ద్వారా వచ్చిన వివరాలు.
+  const urlData = getURLDetails();
+
+  if (Object.keys(urlData).length > 0) {
+    showDetails(urlData);
+    return;
+  }
+
+  // Registration ID మాత్రమే ఉన్నప్పుడు Firebaseలో వెతకాలి.
   const params = new URLSearchParams(window.location.search);
 
-  const data = {
-    regId: getParam(params, "regId", "RegistrationID", "registrationId"),
-    consumerName: getParam(params, "consumerName", "ConsumerName"),
-    consumerMobile: getParam(params, "consumerMobile", "ConsumerMobile"),
-    constructionName: getParam(params, "constructionName", "ConstructionName"),
-    regDateTime: getParam(params, "regDateTime", "RegistrationDateTime"),
-    regType: getParam(params, "regType", "RegistrationType"),
-    regQty: getParam(params, "regQty", "RegistrationQTY"),
-    regAddress: getParam(params, "regAddress", "RegistrationAddress")
-  };
+  const regId =
+    params.get("regId") ||
+    params.get("RegistrationID") ||
+    params.get("registrationId");
 
-  // QR URLలో రిజిస్ట్రేషన్ వివరాలు ఉంటే వాటినే చూపిస్తుంది.
-  const hasDetails = fields.some(([id]) => data[id] !== "");
-
-  if (hasDetails) {
-    showDetails(data);
+  if (!regId) {
+    showStatus(
+      "Registration details లేవు. దయచేసి సరైన QR లింక్‌ను తెరవండి."
+    );
     return;
   }
 
-  // URLలో Registration ID మాత్రమే ఉంటే Firebaseలో వెతుకుతుంది.
-  if (data.regId) {
-    try {
-      const snapshot = await getDocs(collection(db, "registrations"));
-      let found = null;
+  showStatus("Firebase నుంచి Registration Details తెస్తున్నాం...");
 
-      snapshot.forEach((doc) => {
-        const record = doc.data();
+  try {
+    const record = await findFirebaseDetails(regId);
 
-        const recordId =
-          record.RegistrationID ??
-          record.registrationId ??
-          record.regId ??
-          "";
-
-        if (
-          String(recordId).trim().toLowerCase() ===
-          data.regId.trim().toLowerCase()
-        ) {
-          found = record;
-        }
-      });
-
-      if (found) {
-        showDetails({
-          regId: found.RegistrationID ?? found.registrationId ?? found.regId,
-          consumerName: found.ConsumerName ?? found.consumerName,
-          consumerMobile: found.ConsumerMobile ?? found.consumerMobile,
-          constructionName: found.ConstructionName ?? found.constructionName,
-          regDateTime: found.RegistrationDateTime ?? found.regDateTime,
-          regType: found.RegistrationType ?? found.regType,
-          regQty: found.RegistrationQTY ?? found.regQty,
-          regAddress: found.RegistrationAddress ?? found.regAddress
-        });
-      } else {
-        document.getElementById("status").textContent =
-          "Registration details not found.";
-      }
-    } catch (error) {
-      console.error(error);
-      document.getElementById("status").textContent =
-        "Unable to load details. Please check your internet connection.";
+    if (record) {
+      showDetails(record);
+    } else {
+      showStatus(
+        "ఈ Registration ID వివరాలు Firebaseలో కనిపించలేదు: " + regId
+      );
     }
-
-    return;
+  } catch (error) {
+    console.error("Firebase error:", error);
+    showStatus(
+      "వివరాలు తెరవలేకపోయాం. ఇంటర్నెట్, Firebase Rules తనిఖీ చేయండి."
+    );
   }
-
-  document.getElementById("status").textContent =
-    "Registration details are not available in this link.";
 }
 
 loadDetails();
