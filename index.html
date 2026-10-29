@@ -1,58 +1,411 @@
 
-const REGISTRATION_URL =
-  "https://chashok1629-tech.github.io/Sand---billing-/details1.html";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AP Sand Management System</title>
 
-function makeQR(callback) {
-  const registration = {
-    regId: document.getElementById("regId").value.trim(),
-    consumerName: document.getElementById("consumerName").value.trim(),
-    consumerMobile: document.getElementById("consumerMobile").value.trim(),
-    constructionName: document.getElementById("constructionName").value.trim(),
-    regDateTime: document.getElementById("regDateTime").value,
-    regType: document.getElementById("regType").value.trim(),
-    regQty: document.getElementById("regQty").value.trim(),
-    regAddress: document.getElementById("regAddress").value.trim()
-  };
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:10px;background:#eee;color:#000;font-family:Arial,sans-serif}
+.form{max-width:500px;margin:0 auto 15px;padding:12px;background:#fff;border:1px solid #999;border-radius:6px}
+.form h2{text-align:center;font-size:21px;font-weight:900}
+.form label{display:block;margin-top:10px;font-size:15px;font-weight:bold}
+.form input,.form textarea{width:100%;padding:10px;margin-top:4px;border:1px solid #777;border-radius:4px;font-size:16px}
+.form button{width:100%;padding:12px;margin-top:12px;border:0;border-radius:4px;background:#176ca5;color:white;font-size:16px;font-weight:bold}
+#status{text-align:center;margin-top:8px;color:#176ca5;font-size:13px;font-weight:bold}
 
-  if (!registration.regId) {
-    alert("Registration ID నమోదు చేయండి.");
-    if (callback) callback(false);
-    return;
-  }
+#receipt{width:100%;max-width:400px;margin:auto;background:white;color:black;font-family:"Courier New",monospace;font-weight:bold}
+.copy{width:100%;padding:5px;margin:0;background:white}
+.bill-header{display:flex;align-items:center;justify-content:center;gap:5px;font-family:Arial,sans-serif}
+.gov-logo{width:40px;height:40px;object-fit:contain;flex:0 0 40px}
+.bill-title{text-align:center;font-weight:900;line-height:1.05}
+.ap-sand{display:block;font-size:24px;white-space:nowrap}
+.management{display:block;font-size:11px;white-space:nowrap;letter-spacing:-.2px}
+.subtitle{text-align:center;font-size:12px;margin:3px 0}
+.line{border-top:1.5px solid black;margin:3px 0}
+.row{display:grid;grid-template-columns:40% 5% 55%;align-items:start;margin:1px 0;font-size:11px;line-height:1.25}
+.label-text{min-width:0;overflow-wrap:anywhere}
+.colon{text-align:center}
+.value-text{text-align:right;min-width:0;overflow-wrap:anywhere}
+.address-row{display:flex;align-items:flex-start;gap:2px;margin:1px 0;font-size:11px;line-height:1.25}
+.address-row .label-text{white-space:nowrap}
+.address-row .value-text{flex:1;min-width:0;text-align:left;overflow-wrap:anywhere}
+#billQR{width:100%;text-align:center;margin:18px 0 5px;break-inside:avoid}
+#billQR img{display:block;width:1in;height:1in;max-width:1in;object-fit:contain;margin:0 auto}
+#qrThanks{font-size:12px;font-weight:bold;text-align:center;margin-top:5px}
 
-  const url = new URL(REGISTRATION_URL);
-
-  Object.entries(registration).forEach(([key, value]) => {
-    url.searchParams.set(key, value);
-  });
-
-  const qrArea = document.getElementById("billQR");
-  qrArea.innerHTML = "";
-
-  const img = document.createElement("img");
-  img.alt = "Registration Details QR Code";
-  img.style.width = "1in";
-  img.style.height = "1in";
-  img.style.display = "block";
-  img.style.margin = "0 auto";
-
-  img.onload = function () {
-    const thanks = document.createElement("div");
-    thanks.id = "qrThanks";
-    thanks.textContent = "Thank You";
-    qrArea.appendChild(thanks);
-
-    if (callback) callback(true);
-  };
-
-  img.onerror = function () {
-    alert("QR కోడ్ తయారు కాలేదు. Internet తనిఖీ చేయండి.");
-    if (callback) callback(false);
-  };
-
-  img.src =
-    "https://api.qrserver.com/v1/create-qr-code/?size=350x350&margin=1&data=" +
-    encodeURIComponent(url.href);
-
-  qrArea.appendChild(img);
+@media print{
+ @page{size:76mm auto;margin:0}
+ html,body{width:76mm!important;margin:0!important;padding:0!important;background:white!important}
+ .form{display:none!important}
+ #receipt{width:72mm!important;max-width:72mm!important;margin:0!important;padding:0!important}
+ .copy{width:72mm!important;padding:1mm 2mm!important;break-inside:avoid!important}
+ .gov-logo{width:40px!important;height:40px!important}
+ .row{grid-template-columns:40% 5% 55%!important;font-size:11px!important}
+ #billQR{display:block!important;margin:18px 0 5px!important}
+ #billQR img{width:1in!important;height:1in!important;max-width:1in!important}
 }
+</style>
+</head>
+
+<body>
+
+<div class="form" id="entryForm">
+<h2>AP SAND MANAGEMENT SYSTEM</h2>
+<h3>Sand Bill Entry</h3>
+
+<label>Order Id</label>
+<input id="order" placeholder="Enter Order Id">
+
+<label>Trip Number</label>
+<input id="trip" placeholder="Enter Trip Number">
+
+<label>Customer Name</label>
+<input id="customer" placeholder="Enter Customer Name">
+
+<label>Customer Mobile No</label>
+<input id="mobile" type="tel" placeholder="Enter Customer Mobile No">
+
+<label>Sand Quantity (Tonnes)</label>
+<input id="quantity" type="number" placeholder="Enter Sand Quantity">
+
+<label>Sand Supply Point Name</label>
+<input id="supply" placeholder="Enter Supply Point Name">
+
+<label>Dispatch Date</label>
+<input id="date" type="datetime-local" step="1">
+
+<label>Driver Name</label>
+<input id="driver" placeholder="Enter Driver Name">
+
+<label>Driver Mobile Number</label>
+<input id="driverMobile" type="tel" placeholder="Enter Driver Mobile No">
+
+<label>Vehicle Number</label>
+<input id="vehicle" placeholder="Enter Vehicle Number">
+
+<label>Address</label>
+<textarea id="address" rows="2" placeholder="Enter Address"></textarea>
+
+<h3>Registration Details (for QR)</h3>
+
+<label>Registration ID</label>
+<input id="regId" placeholder="Example: GC18A0066-1D8">
+
+<label>Consumer Name</label>
+<input id="consumerName" placeholder="Enter Consumer Name">
+
+<label>Consumer Mobile No</label>
+<input id="consumerMobile" type="tel" placeholder="Enter Consumer Mobile No">
+
+<label>Construction Name</label>
+<input id="constructionName" placeholder="Enter Construction Name">
+
+<label>Registration Date &amp; Time</label>
+<input id="regDateTime" type="datetime-local" step="1">
+
+<label>Registration Type</label>
+<input id="regType" placeholder="Enter Registration Type">
+
+<label>Registration QTY (in MT)</label>
+<input id="regQty" type="number" step="any" placeholder="Enter Quantity in MT">
+
+<label>Registration Address</label>
+<textarea id="regAddress" rows="3" placeholder="Enter Registration Address"></textarea>
+
+<div id="status">Enter details to prepare the bill.</div>
+
+<button type="button" onclick="previewBill()">Preview Bill</button>
+<button type="button" onclick="printBill()">Print 3-inch Bill / PDF</button>
+<button type="button" onclick="saveCurrent()">Save Order Details</button>
+<button type="button" onclick="resetForm()">New Bill / Clear Form</button>
+</div>
+
+<div id="receipt">
+
+  <div class="copy">
+    <div class="bill-header">
+      <img src="./3840px-Emblem_of_Andhra_Pradesh.svg.png" class="gov-logo" alt="Andhra Pradesh Emblem">
+      <div class="bill-title">
+        <span class="ap-sand">AP SAND</span>
+        <span class="management">MANAGEMENT SYSTEM</span>
+      </div>
+    </div>
+    <div class="subtitle">Consumer Copy</div>
+    <div class="line"></div>
+    <div class="row"><div class="label-text">Order Id</div><div class="colon">:</div><span class="value-text" id="o1">-</span></div>
+    <div class="row"><div class="label-text">Trip No</div><div class="colon">:</div><span class="value-text" id="t1">-</span></div>
+    <div class="row"><div class="label-text">Customer Name</div><div class="colon">:</div><span class="value-text" id="c1">-</span></div>
+    <div class="row"><div class="label-text">Customer Mobile No</div><div class="colon">:</div><span class="value-text" id="m1">-</span></div>
+    <div class="row"><div class="label-text">Sand Quantity</div><div class="colon">:</div><span class="value-text" id="q1">-</span></div>
+    <div class="row"><div class="label-text">Sand Supply Point Name</div><div class="colon">:</div><span class="value-text" id="s1">-</span></div>
+    <div class="row"><div class="label-text">Dispatch Date</div><div class="colon">:</div><span class="value-text" id="d1">-</span></div>
+    <div class="row"><div class="label-text">Driver Name</div><div class="colon">:</div><span class="value-text" id="dr1">-</span></div>
+    <div class="row"><div class="label-text">Driver Mobile No</div><div class="colon">:</div><span class="value-text" id="dm1">-</span></div>
+    <div class="row"><div class="label-text">Vehicle No</div><div class="colon">:</div><span class="value-text" id="v1">-</span></div>
+    <div class="address-row"><div class="label-text">Address</div><div class="colon">:</div><span class="value-text" id="a1">-</span></div>
+    <div class="line"></div>
+  </div>
+
+  <div class="copy">
+    <div class="bill-header">
+      <img src="./3840px-Emblem_of_Andhra_Pradesh.svg.png" class="gov-logo" alt="Andhra Pradesh Emblem">
+      <div class="bill-title">
+        <span class="ap-sand">AP SAND</span>
+        <span class="management">MANAGEMENT SYSTEM</span>
+      </div>
+    </div>
+    <div class="subtitle">Driver Copy</div>
+    <div class="line"></div>
+    <div class="row"><div class="label-text">Order Id</div><div class="colon">:</div><span class="value-text" id="o2">-</span></div>
+    <div class="row"><div class="label-text">Trip No</div><div class="colon">:</div><span class="value-text" id="t2">-</span></div>
+    <div class="row"><div class="label-text">Customer Name</div><div class="colon">:</div><span class="value-text" id="c2">-</span></div>
+    <div class="row"><div class="label-text">Customer Mobile No</div><div class="colon">:</div><span class="value-text" id="m2">-</span></div>
+    <div class="row"><div class="label-text">Sand Quantity</div><div class="colon">:</div><span class="value-text" id="q2">-</span></div>
+    <div class="row"><div class="label-text">Sand Supply Point Name</div><div class="colon">:</div><span class="value-text" id="s2">-</span></div>
+    <div class="row"><div class="label-text">Dispatch Date</div><div class="colon">:</div><span class="value-text" id="d2">-</span></div>
+    <div class="row"><div class="label-text">Driver Name</div><div class="colon">:</div><span class="value-text" id="dr2">-</span></div>
+    <div class="row"><div class="label-text">Driver Mobile No</div><div class="colon">:</div><span class="value-text" id="dm2">-</span></div>
+    <div class="row"><div class="label-text">Vehicle No</div><div class="colon">:</div><span class="value-text" id="v2">-</span></div>
+    <div class="address-row"><div class="label-text">Address</div><div class="colon">:</div><span class="value-text" id="a2">-</span></div>
+    <div class="line"></div>
+  </div>
+
+  <div id="billQR">
+    <div id="qrThanks">Thank You</div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = "apSandOrders_v1";
+const REGISTRATION_URL =
+ "https://chashok1629-tech.github.io/Sand---billing-/details1.html";
+
+const fieldIds = [
+ "order","trip","customer","mobile","quantity","supply","date",
+ "driver","driverMobile","vehicle","address","regId","consumerName",
+ "consumerMobile","constructionName","regDateTime","regType","regQty",
+ "regAddress"
+];
+
+function getOrders(){
+ try {
+  return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+ } catch(e) {
+  return {};
+ }
+}
+
+function getValue(id){
+ const el = document.getElementById(id);
+ return el ? el.value.trim() || "-" : "-";
+}
+
+function put(id,value){
+ document.getElementById(id).textContent = value;
+}
+
+function setStatus(message){
+ document.getElementById("status").textContent = message;
+}
+
+function formatDate(value){
+ if(!value || value === "-") return "-";
+ const dt = new Date(value);
+ if(isNaN(dt.getTime())) return value;
+
+ const day = String(dt.getDate()).padStart(2,"0");
+ const month = String(dt.getMonth()+1).padStart(2,"0");
+ const year = dt.getFullYear();
+ let hours = dt.getHours();
+ const minutes = String(dt.getMinutes()).padStart(2,"0");
+ const seconds = String(dt.getSeconds()).padStart(2,"0");
+ const ampm = hours >= 12 ? "PM" : "AM";
+ hours = hours % 12 || 12;
+
+ return day+"-"+month+"-"+year+" "+
+ String(hours).padStart(2,"0")+":"+minutes+":"+seconds+" "+ampm;
+}
+
+function collectData(){
+ const data = {};
+ fieldIds.forEach(id => data[id] = document.getElementById(id).value);
+ return data;
+}
+
+function fillForm(data){
+ fieldIds.forEach(id => {
+  document.getElementById(id).value = data[id] || "";
+ });
+ updateBill();
+}
+
+function saveCurrent(showMessage = true){
+ const order = document.getElementById("order").value.trim();
+
+ if(!order){
+  setStatus("ముందుగా Order ID నమోదు చేయండి.");
+  return false;
+ }
+
+ try{
+  const orders = getOrders();
+  orders[order] = collectData();
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(orders));
+  if(showMessage) setStatus("Order "+order+" వివరాలు సేవ్ అయ్యాయి.");
+  return true;
+ }catch(e){
+  setStatus("సేవ్ కాలేదు. Browser storage తనిఖీ చేయండి.");
+  return false;
+ }
+}
+
+function loadOrder(){
+ const order = document.getElementById("order").value.trim();
+ if(!order) return;
+
+ const orders = getOrders();
+ if(orders[order]){
+  fillForm(orders[order]);
+  setStatus("Order "+order+" వివరాలు లోడ్ అయ్యాయి.");
+ }else{
+  fieldIds.filter(id => id !== "order").forEach(id => {
+   document.getElementById(id).value = "";
+  });
+  updateBill();
+  setStatus("కొత్త Order ID. వివరాలు నమోదు చేయండి.");
+ }
+}
+
+function updateBill(){
+ const fields = [
+  ["order","o1","o2"],
+  ["trip","t1","t2"],
+  ["customer","c1","c2"],
+  ["mobile","m1","m2"],
+  ["quantity","q1","q2"],
+  ["supply","s1","s2"],
+  ["date","d1","d2"],
+  ["driver","dr1","dr2"],
+  ["driverMobile","dm1","dm2"],
+  ["vehicle","v1","v2"],
+  ["address","a1","a2"]
+ ];
+
+ fields.forEach(f => {
+  let value = getValue(f[0]);
+  if(f[0] === "quantity" && value !== "-") value += " Tons";
+  if(f[0] === "date") value = formatDate(value);
+  put(f[1],value);
+  put(f[2],value);
+ });
+}
+
+/* ప్రతి Preview Bill నొక్కినప్పుడు ప్రస్తుత Registration వివరాలతో QR తయారు చేస్తుంది */
+function makeQR(callback){
+ const registration = {
+  regId: document.getElementById("regId").value.trim(),
+  consumerName: document.getElementById("consumerName").value.trim(),
+  consumerMobile: document.getElementById("consumerMobile").value.trim(),
+  constructionName: document.getElementById("constructionName").value.trim(),
+  regDateTime: document.getElementById("regDateTime").value,
+  regType: document.getElementById("regType").value.trim(),
+  regQty: document.getElementById("regQty").value.trim(),
+  regAddress: document.getElementById("regAddress").value.trim()
+ };
+
+ if(!registration.regId){
+  setStatus("దయచేసి Registration ID నమోదు చేయండి.");
+  document.getElementById("regId").focus();
+  if(callback) callback(false);
+  return;
+ }
+
+ const url = new URL(REGISTRATION_URL);
+ Object.entries(registration).forEach(([key,value]) => {
+  url.searchParams.set(key,value);
+ });
+
+ const qrArea = document.getElementById("billQR");
+ qrArea.innerHTML = "";
+
+ const img = document.createElement("img");
+ img.alt = "Registration Details QR Code";
+
+ img.onload = function(){
+  const thanks = document.createElement("div");
+  thanks.id = "qrThanks";
+  thanks.textContent = "Thank You";
+  qrArea.appendChild(thanks);
+  setStatus("QR సిద్ధమైంది: "+registration.regId);
+  if(callback) callback(true);
+ };
+
+ img.onerror = function(){
+  setStatus("QR తయారు కాలేదు. Internet తనిఖీ చేయండి.");
+  if(callback) callback(false);
+ };
+
+ img.src =
+  "https://api.qrserver.com/v1/create-qr-code/" +
+  "?size=350x350&margin=1&color=000000&bgcolor=ffffff&data=" +
+  encodeURIComponent(url.href);
+
+ qrArea.appendChild(img);
+}
+
+function previewBill(){
+ updateBill();
+ makeQR(function(success){
+  if(success){
+   document.getElementById("receipt").scrollIntoView({
+    behavior:"smooth",block:"start"
+   });
+  }
+ });
+}
+
+function printBill(){
+ updateBill();
+
+ if(!saveCurrent(true)) return;
+
+ makeQR(function(success){
+  if(success) window.print();
+ });
+}
+
+function resetForm(){
+ if(!confirm("కొత్త బిల్ ప్రారంభించాలా? సేవ్ చేసిన Orders తొలగవు.")) return;
+
+ document.querySelectorAll("#entryForm input,#entryForm textarea")
+ .forEach(el => el.value = "");
+
+ document.getElementById("billQR").innerHTML = "";
+ updateBill();
+ setStatus("కొత్త బిల్ కోసం వివరాలు నమోదు చేయండి.");
+ document.getElementById("order").focus();
+}
+
+document.getElementById("order").addEventListener("change",loadOrder);
+
+document.getElementById("order").addEventListener("keydown",e => {
+ if(e.key === "Enter"){
+  e.preventDefault();
+  loadOrder();
+ }
+});
+
+fieldIds.filter(id => id !== "order").forEach(id => {
+ const el = document.getElementById(id);
+ el.addEventListener("input",updateBill);
+ el.addEventListener("change",updateBill);
+});
+
+updateBill();
+</script>
+
+</body>
+</html>
