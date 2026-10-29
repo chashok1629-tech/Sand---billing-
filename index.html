@@ -1,173 +1,157 @@
-
 <!DOCTYPE html>
-<html lang="te">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AP Sand Management System - Registration Details</title>
+<title>AP Sand - Registration Details</title>
 
 <style>
 *{box-sizing:border-box}
-
 body{
   font-family:Arial,sans-serif;
+  background:#f2f2f2;
   margin:0;
   padding:15px;
-  background:#f2f2f2;
-  color:#000;
+  color:#111;
 }
-
 .container{
   max-width:500px;
-  margin:0 auto;
-  padding:20px;
-  background:#fff;
+  margin:auto;
+  background:white;
+  padding:18px;
   border:1px solid #ccc;
   border-radius:8px;
 }
-
-h2{
-  color:#075b32;
-  font-size:24px;
-  text-align:center;
-  margin-bottom:5px;
-}
-
-.heading{
-  text-align:center;
+h2{text-align:center;color:#075b32;margin-bottom:4px}
+.heading{text-align:center;font-weight:bold;margin-top:0}
+h3{text-align:center;color:#075b32}
+label{
+  display:block;
   font-weight:bold;
-  margin-top:0;
+  margin-top:13px;
 }
-
-h3{
-  margin-top:22px;
-  color:#075b32;
-  text-align:center;
-  border-bottom:2px solid #075b32;
-  padding-bottom:10px;
+input,textarea,select{
+  width:100%;
+  padding:11px;
+  margin-top:5px;
+  border:1px solid #999;
+  border-radius:5px;
+  font-size:16px;
+  background:white;
 }
-
-.detail-row{
-  padding:12px 0;
+textarea{min-height:70px;resize:vertical}
+button{
+  width:100%;
+  padding:13px;
+  margin-top:18px;
+  background:#075b32;
+  color:white;
+  border:0;
+  border-radius:5px;
+  font-size:16px;
+  font-weight:bold;
+}
+#result{
+  display:none;
+  margin-top:20px;
+  border-top:2px solid #075b32;
+  padding-top:10px;
+}
+.item{
+  padding:10px 0;
   border-bottom:1px solid #ddd;
   overflow-wrap:anywhere;
 }
-
-.label{
-  display:block;
-  font-weight:bold;
-  font-size:15px;
-  margin-bottom:5px;
-}
-
-.value{
-  display:block;
-  font-size:16px;
-  line-height:1.5;
-  overflow-wrap:anywhere;
-}
-
-.message{
-  margin-top:20px;
-  text-align:center;
-  font-size:14px;
-  color:#555;
-}
+.value{display:block;margin-top:5px;font-size:16px}
 </style>
 </head>
 
 <body>
 <div class="container">
-
   <h2>AP SAND</h2>
   <p class="heading">MANAGEMENT SYSTEM</p>
-
   <h3>Registration Details</h3>
 
-  <div class="detail-row">
-    <span class="label">Registration ID</span>
-    <span class="value" id="regId">-</span>
+  <form id="regForm">
+    <label>Registration ID</label>
+    <input id="regId" required>
+
+    <label>Consumer Name</label>
+    <input id="consumerName" required>
+
+    <label>Consumer Mobile No</label>
+    <input id="consumerMobile" type="tel" required>
+
+    <label>Construction Name</label>
+    <input id="constructionName" required>
+
+    <label>Registration Date &amp; Time</label>
+    <input id="regDateTime" type="text"
+           placeholder="DD-MM-YYYY HH:MM AM/PM" required>
+
+    <label>Registration Type</label>
+    <select id="regType" required>
+      <option value="">Select Registration Type</option>
+      <option>GENERAL SAND CONSUMPTION</option>
+      <option>GOVERNMENT</option>
+      <option>OTHER</option>
+    </select>
+
+    <label>Registration QTY (in MT)</label>
+    <input id="regQty" type="number" step="any" min="0" required>
+
+    <label>Registration Address</label>
+    <textarea id="regAddress" required></textarea>
+
+    <button type="submit">Show Registration Details</button>
+  </form>
+
+  <div id="result">
+    <h3>Entered Registration Details</h3>
+    <div class="item"><b>Registration ID</b><span class="value" id="outRegId"></span></div>
+    <div class="item"><b>Consumer Name</b><span class="value" id="outConsumerName"></span></div>
+    <div class="item"><b>Consumer Mobile No</b><span class="value" id="outConsumerMobile"></span></div>
+    <div class="item"><b>Construction Name</b><span class="value" id="outConstructionName"></span></div>
+    <div class="item"><b>Registration Date &amp; Time</b><span class="value" id="outRegDateTime"></span></div>
+    <div class="item"><b>Registration Type</b><span class="value" id="outRegType"></span></div>
+    <div class="item"><b>Registration QTY (in MT)</b><span class="value" id="outRegQty"></span></div>
+    <div class="item"><b>Registration Address</b><span class="value" id="outRegAddress"></span></div>
   </div>
-
-  <div class="detail-row">
-    <span class="label">Consumer Name</span>
-    <span class="value" id="consumerName">-</span>
-  </div>
-
-  <div class="detail-row">
-    <span class="label">Consumer Mobile No</span>
-    <span class="value" id="consumerMobile">-</span>
-  </div>
-
-  <div class="detail-row">
-    <span class="label">Construction Name</span>
-    <span class="value" id="constructionName">-</span>
-  </div>
-
-  <div class="detail-row">
-    <span class="label">Registration Date &amp; Time</span>
-    <span class="value" id="regDateTime">-</span>
-  </div>
-
-  <div class="detail-row">
-    <span class="label">Registration Type</span>
-    <span class="value" id="regType">-</span>
-  </div>
-
-  <div class="detail-row">
-    <span class="label">Registration QTY (in MT)</span>
-    <span class="value" id="regQty">-</span>
-  </div>
-
-  <div class="detail-row">
-    <span class="label">Registration Address</span>
-    <span class="value" id="regAddress">-</span>
-  </div>
-
-  <p class="message" id="message">
-    Registration details will appear here.
-  </p>
-
 </div>
 
 <script>
-(function(){
+const ids = [
+  "regId",
+  "consumerName",
+  "consumerMobile",
+  "constructionName",
+  "regDateTime",
+  "regType",
+  "regQty",
+  "regAddress"
+];
 
-  const params = new URLSearchParams(window.location.search);
+document.getElementById("regForm").addEventListener("submit", function(e){
+  e.preventDefault();
 
-  const fields = [
-    "regId",
-    "consumerName",
-    "consumerMobile",
-    "constructionName",
-    "regDateTime",
-    "regType",
-    "regQty",
-    "regAddress"
+  const outputIds = [
+    "outRegId",
+    "outConsumerName",
+    "outConsumerMobile",
+    "outConstructionName",
+    "outRegDateTime",
+    "outRegType",
+    "outRegQty",
+    "outRegAddress"
   ];
 
-  let hasDetails = false;
-
-  fields.forEach(function(id){
-    const value = params.get(id);
-
-    if(value && value.trim() !== ""){
-      document.getElementById(id).textContent = value;
-      hasDetails = true;
-    }
+  ids.forEach(function(id, index){
+    document.getElementById(outputIds[index]).textContent =
+      document.getElementById(id).value.trim();
   });
 
-  const message = document.getElementById("message");
-
-  if(hasDetails){
-    message.textContent = "Registration details loaded successfully.";
-  }else{
-    message.textContent =
-      "No registration details received. Please scan the QR code on your bill.";
-  }
-
-})();
+  document.getElementById("result").style.display = "block";
+});
 </script>
-
 </body>
 </html>
