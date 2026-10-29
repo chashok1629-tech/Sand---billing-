@@ -4,124 +4,124 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AP Sand Billing App - Registration Details</title>
+<title>AP Sand Management System - Registration Details</title>
 
 <style>
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+
+body{
+  font-family:Arial,sans-serif;
+  margin:0;
+  padding:15px;
+  background:#f2f2f2;
+  color:#000;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  padding: 20px;
-  margin: 0;
-  background: #f2f2f2;
-  color: #000;
+.container{
+  max-width:500px;
+  margin:0 auto;
+  padding:20px;
+  background:#fff;
+  border:1px solid #ccc;
+  border-radius:8px;
 }
 
-.container {
-  max-width: 500px;
-  margin: auto;
-  padding: 20px;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+h2{
+  color:#075b32;
+  font-size:24px;
+  text-align:center;
+  margin-bottom:5px;
 }
 
-h2 {
-  color: #075b32;
-  font-size: 22px;
+.heading{
+  text-align:center;
+  font-weight:bold;
+  margin-top:0;
 }
 
-h3 {
-  margin-top: 20px;
-  color: #075b32;
-  border-bottom: 2px solid #075b32;
-  padding-bottom: 8px;
+h3{
+  margin-top:22px;
+  color:#075b32;
+  text-align:center;
+  border-bottom:2px solid #075b32;
+  padding-bottom:10px;
 }
 
-.details {
-  text-align: left;
-  margin-top: 15px;
+.detail-row{
+  padding:12px 0;
+  border-bottom:1px solid #ddd;
+  overflow-wrap:anywhere;
 }
 
-.detail-row {
-  padding: 10px 0;
-  border-bottom: 1px solid #ddd;
-  overflow-wrap: anywhere;
+.label{
+  display:block;
+  font-weight:bold;
+  font-size:15px;
+  margin-bottom:5px;
 }
 
-.label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
+.value{
+  display:block;
+  font-size:16px;
+  line-height:1.5;
+  overflow-wrap:anywhere;
 }
 
-.value {
-  display: block;
-  font-size: 16px;
-}
-
-.message {
-  margin-top: 20px;
-  color: #555;
-  font-size: 14px;
+.message{
+  margin-top:20px;
+  text-align:center;
+  font-size:14px;
+  color:#555;
 }
 </style>
 </head>
 
 <body>
-
 <div class="container">
 
   <h2>AP SAND</h2>
-  <p><strong>MANAGEMENT SYSTEM</strong></p>
+  <p class="heading">MANAGEMENT SYSTEM</p>
 
   <h3>Registration Details</h3>
 
-  <div class="details" id="registrationDetails">
+  <div class="detail-row">
+    <span class="label">Registration ID</span>
+    <span class="value" id="regId">-</span>
+  </div>
 
-    <div class="detail-row">
-      <span class="label">Registration ID</span>
-      <span class="value" id="regId">-</span>
-    </div>
+  <div class="detail-row">
+    <span class="label">Consumer Name</span>
+    <span class="value" id="consumerName">-</span>
+  </div>
 
-    <div class="detail-row">
-      <span class="label">Consumer Name</span>
-      <span class="value" id="consumerName">-</span>
-    </div>
+  <div class="detail-row">
+    <span class="label">Consumer Mobile No</span>
+    <span class="value" id="consumerMobile">-</span>
+  </div>
 
-    <div class="detail-row">
-      <span class="label">Consumer Mobile No</span>
-      <span class="value" id="consumerMobile">-</span>
-    </div>
+  <div class="detail-row">
+    <span class="label">Construction Name</span>
+    <span class="value" id="constructionName">-</span>
+  </div>
 
-    <div class="detail-row">
-      <span class="label">Construction Name</span>
-      <span class="value" id="constructionName">-</span>
-    </div>
+  <div class="detail-row">
+    <span class="label">Registration Date &amp; Time</span>
+    <span class="value" id="regDateTime">-</span>
+  </div>
 
-    <div class="detail-row">
-      <span class="label">Registration Date &amp; Time</span>
-      <span class="value" id="regDateTime">-</span>
-    </div>
+  <div class="detail-row">
+    <span class="label">Registration Type</span>
+    <span class="value" id="regType">-</span>
+  </div>
 
-    <div class="detail-row">
-      <span class="label">Registration Type</span>
-      <span class="value" id="regType">-</span>
-    </div>
+  <div class="detail-row">
+    <span class="label">Registration QTY (in MT)</span>
+    <span class="value" id="regQty">-</span>
+  </div>
 
-    <div class="detail-row">
-      <span class="label">Registration QTY (in MT)</span>
-      <span class="value" id="regQty">-</span>
-    </div>
-
-    <div class="detail-row">
-      <span class="label">Registration Address</span>
-      <span class="value" id="regAddress">-</span>
-    </div>
-
+  <div class="detail-row">
+    <span class="label">Registration Address</span>
+    <span class="value" id="regAddress">-</span>
   </div>
 
   <p class="message" id="message">
@@ -131,33 +131,42 @@ h3 {
 </div>
 
 <script>
-const params = new URLSearchParams(window.location.search);
+(function(){
 
-const fields = {
-  regId: "regId",
-  consumerName: "consumerName",
-  consumerMobile: "consumerMobile",
-  constructionName: "constructionName",
-  regDateTime: "regDateTime",
-  regType: "regType",
-  regQty: "regQty",
-  regAddress: "regAddress"
-};
+  const params = new URLSearchParams(window.location.search);
 
-let hasDetails = false;
+  const fields = [
+    "regId",
+    "consumerName",
+    "consumerMobile",
+    "constructionName",
+    "regDateTime",
+    "regType",
+    "regQty",
+    "regAddress"
+  ];
 
-Object.entries(fields).forEach(([key, elementId]) => {
-  const value = params.get(key);
-  if (value && value.trim() !== "") {
-    document.getElementById(elementId).textContent = value;
-    hasDetails = true;
+  let hasDetails = false;
+
+  fields.forEach(function(id){
+    const value = params.get(id);
+
+    if(value && value.trim() !== ""){
+      document.getElementById(id).textContent = value;
+      hasDetails = true;
+    }
+  });
+
+  const message = document.getElementById("message");
+
+  if(hasDetails){
+    message.textContent = "Registration details loaded successfully.";
+  }else{
+    message.textContent =
+      "No registration details received. Please scan the QR code on your bill.";
   }
-});
 
-if (hasDetails) {
-  document.getElementById("message").textContent =
-    "Registration details loaded successfully.";
-}
+})();
 </script>
 
 </body>
